@@ -1,6 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tenta_API.Data;
+using Tenta_API.Interfaces;
 using Tenta_API.Model;
 using Tenta_API.ViewModel;
 
@@ -11,98 +13,92 @@ namespace Tenta_API.Controllers
   public class CoursesController : ControllerBase
   {
     private readonly CourseContext _context;
-    public CoursesController(CourseContext context)
+    private readonly ICourseRepository _courseRepo;
+    private readonly IMapper _mapper;
+    public CoursesController(CourseContext context, ICourseRepository courseRepo, IMapper mapper)
     {
+      _mapper = mapper;
+      _courseRepo = courseRepo;
       _context = context;
     }
     [HttpGet()]
-    public async Task<ActionResult<List<CourseViewModel>>> ListCourses()
+    public async Task<ActionResult<List<CourseViewModel>>> GetAllCourses()
     {
-      var response = await _context.Courses.ToListAsync();
-      var courseList = new List<CourseViewModel>();
-
-      foreach (var course in response)
-      {
-        courseList.Add(
-          new CourseViewModel {
-            CourseId = course.Id,
-            CourseNumber = course.Number,
-            CourseTitle = course.Title,
-            CourseLength = course.Length,
-            CourseInfo = string.Concat("Beskrivning: ", course.Description, ", ", "Detaljer: ", course.Details)
-          }
-        );
-      }
-
-      return Ok(courseList);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Course>> GetCourseById(int id)
-    {
-      var response = await _context.Courses.FindAsync(id);
-      if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med id: {id}.");
+      var response = await _courseRepo.GetAllCoursesAsync();
       return Ok(response);
     }
 
-    [HttpGet("bytitle/{title}")]
-    public async Task<ActionResult<Course>> GetCourseByTitle(string title)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<CourseViewModel>> GetCourse(int id)
     {
-      var response = await _context.Courses.SingleOrDefaultAsync(c => c.Title!.ToLower() == title.ToLower());
+      try
+      {
+        var response = await _courseRepo.GetCourseAsync(id);
+        if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med id: {id}.");
+
+        return Ok(response);
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, ex.Message);
+      }
+
+    }
+
+    [HttpGet("bytitle/{title}")]
+    public async Task<ActionResult<CourseViewModel>> GetCourse(string title)
+    {
+      var response = await _courseRepo.GetCourseAsync(title);
       if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med Titel: {title}.");
 
       return Ok(response);
     }
 
     [HttpGet("bycategory/{category}")]
-    public async Task<List<Course>> GetCourseByCategory(string category)
+    public async Task<List<CourseViewModel>> GetCourseByCategory(string category)
     {
-      var response = await _context.Courses.Where(c => c.Category!.ToLower() == category.ToLower()).ToListAsync();
+      var response = await _courseRepo.GetCourseByCategoryAsync(category);
       return response;
     }
 
     [HttpPost()]
     public async Task<ActionResult<Course>> AddCourse(PostCourseViewModel course)
     {
-      var courseToAdd = new Course{
-        Title = course.Title,
-        Number = course.Number,
-        Length = course.Length,
-        Category = course.Category,
-        Description = course.Description,
-        Details = course.Details
-      };
+      var courseToAdd = _mapper.Map<Course>(course);
+
       await _context.Courses.AddAsync(courseToAdd);
       await _context.SaveChangesAsync();
       return StatusCode(201, course);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateCourse(int id, Course model)
+    public async Task<ActionResult> UpdateCourse(int id, PostCourseViewModel model)
     {
-      var response = await _context.Courses.FindAsync(id);
-      if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med id: {id} som skulle uppdateras.");
-      response.Number = model.Number;
-      response.Title = model.Title;
-      response.Length = model.Length;
-      response.Category = model.Category;
-      response.Description = model.Description;
-      response.Details = model.Details;
-
-      _context.Courses.Update(response);
-      await _context.SaveChangesAsync();
-
-      return NoContent();
+      try
+      {
+        await _courseRepo.UpdateCourseAsync(id, model);
+        if (await _courseRepo.SaveAllAsync())
+        {
+          return NoContent();
+        }
+        return StatusCode(500, "Ett fel inträffade när kursen skulle uppdateras");
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, ex.Message);
+      }
     }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCourse(int id)
     {
-      var response = await _context.Courses.FindAsync(id);
-      if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med id: {id} som skulle tas bort.");
-      _context.Courses.Remove(response);
-      await _context.SaveChangesAsync();
-      return NoContent();
+      _courseRepo.DeleteCourse(id);
+
+      if (await _courseRepo.SaveAllAsync())
+      {
+        return NoContent();
+      }
+      return StatusCode(500, "Något gick fel.");
     }
   }
 }

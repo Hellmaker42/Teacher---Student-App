@@ -7,7 +7,6 @@ namespace Tenta_API.Data
   {
 
     public DbSet<Course> Courses => Set<Course>();
-
     public CourseContext(DbContextOptions options) : base(options)
     {
     }
