@@ -5,6 +5,7 @@ using Tenta_API.Data;
 using Tenta_API.Interfaces;
 using Tenta_API.Model;
 using Tenta_API.ViewModel;
+using Tenta_API.ViewModel.Course;
 
 namespace Tenta_API.Controllers
 {
@@ -12,15 +13,31 @@ namespace Tenta_API.Controllers
   [Route("api/v1/courses")]
   public class CoursesController : ControllerBase
   {
-    private readonly CourseContext _context;
+
     private readonly ICourseRepository _courseRepo;
     private readonly IMapper _mapper;
-    public CoursesController(CourseContext context, ICourseRepository courseRepo, IMapper mapper)
+    public CoursesController(ICourseRepository courseRepo, IMapper mapper)
     {
       _mapper = mapper;
       _courseRepo = courseRepo;
-      _context = context;
     }
+    [HttpPost()]
+    public async Task<ActionResult> AddCourse(PostCourseViewModel model)
+    {
+      if (await _courseRepo.GetCourseByNumberAsync(model.Number) is not null)
+      {
+        return BadRequest($"Kursnummer {model.Number} finns redan i systemet.");
+      }
+
+      await _courseRepo.AddCourseAsync(model);
+      if(await _courseRepo.SaveAllAsync())
+      {
+        return StatusCode(201);
+      }
+
+      return StatusCode(500, "Det gick inte att spara kursen.");
+    }
+
     [HttpGet()]
     public async Task<ActionResult<List<CourseViewModel>>> GetAllCourses()
     {
@@ -54,22 +71,31 @@ namespace Tenta_API.Controllers
       return Ok(response);
     }
 
-    [HttpGet("bycategory/{category}")]
-    public async Task<List<CourseViewModel>> GetCourseByCategory(string category)
+    [HttpGet("bynumber/{number}")]
+    public async Task<ActionResult<CourseViewModel>> GetCourseByNumber(int number)
     {
-      var response = await _courseRepo.GetCourseByCategoryAsync(category);
-      return response;
+      var response = await _courseRepo.GetCourseByNumberAsync(number);
+      if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med kursnummer: {number}.");
+
+      return Ok(response);
     }
 
-    [HttpPost()]
-    public async Task<ActionResult<Course>> AddCourse(PostCourseViewModel course)
-    {
-      var courseToAdd = _mapper.Map<Course>(course);
+    // [HttpGet("bycategory/{category}")]
+    // public async Task<List<CourseViewModel>> GetCourseByCategory(string category)
+    // {
+    //   var response = await _courseRepo.GetCourseByCategoryAsync(category);
+    //   return response;
+    // }
 
-      await _context.Courses.AddAsync(courseToAdd);
-      await _context.SaveChangesAsync();
-      return StatusCode(201, course);
+    [HttpGet("withcategory/{id}")]
+    public async Task<ActionResult<CourseWithCategoryViewModel>> GetCourseWithCategory(int id)
+    {
+      var response = await _courseRepo.GetCourseWithCategoryAsync(id);
+      if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med id: {id}.");
+
+      return Ok(response);
     }
+
 
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateCourse(int id, PostCourseViewModel model)
