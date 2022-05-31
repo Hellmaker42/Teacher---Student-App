@@ -18,5 +18,6 @@ namespace Tenta_API.Model
     public Category Category { get; set; } = new Category();
     [ForeignKey("LengthId")]
     public Length Length { get; set; } = new Length();
+    public ICollection<Student> Students { get; set; } = new List<Student>();
   }
 }

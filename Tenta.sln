@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tenta-API", "Tenta-API\Tenta-API.csproj", "{DC64FEC2-4DE1-4300-B79D-EDDD57580FBF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{95EFB58B-6F48-4EA6-85D0-2A3AEFBCD591}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcUser", "Clients\MvcUser\MvcUser.csproj", "{8E09D638-E796-4AEB-9A97-26FEAC155783}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,12 @@ Global
 		{DC64FEC2-4DE1-4300-B79D-EDDD57580FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC64FEC2-4DE1-4300-B79D-EDDD57580FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC64FEC2-4DE1-4300-B79D-EDDD57580FBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E09D638-E796-4AEB-9A97-26FEAC155783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E09D638-E796-4AEB-9A97-26FEAC155783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E09D638-E796-4AEB-9A97-26FEAC155783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E09D638-E796-4AEB-9A97-26FEAC155783}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8E09D638-E796-4AEB-9A97-26FEAC155783} = {95EFB58B-6F48-4EA6-85D0-2A3AEFBCD591}
 	EndGlobalSection
 EndGlobal
