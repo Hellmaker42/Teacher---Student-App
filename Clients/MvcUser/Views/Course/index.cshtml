@@ -1,0 +1,19 @@
+@model IEnumerable<MvcUser.ViewModels.CategoryViewModel>
+
+@{
+  ViewData["Title"] = "Våra Kategorier utav kurser";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<article>
+  <section>
+    @foreach (var category in Model)
+    {
+      <div>
+        <a asp-controller="Course" asp-action="coursesbycategory" asp-route-id="@category.CategoryId">@category.CategoryName</a>
+        <br>
+      </div>
+    }
+  </section>
+</article>

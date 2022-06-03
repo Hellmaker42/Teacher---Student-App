@@ -6,6 +6,6 @@ namespace Tenta_API.ViewModel.Category
     {
         public int CategoryId { get; set; }
         public string? CategoryName { get; set; }
-        public List<CourseViewModel> Courses { get; set; } = new List<CourseViewModel>();
+        public List<CourseWithInfoViewModel> Courses { get; set; } = new List<CourseWithInfoViewModel>();
     }
 }

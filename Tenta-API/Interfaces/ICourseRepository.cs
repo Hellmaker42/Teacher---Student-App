@@ -13,7 +13,9 @@ namespace Tenta_API.Interfaces
         public Task<CourseViewModel?> GetCourseByNumberAsync(int number);
         public Task<CourseWithCategoryViewModel> GetCourseWithCategoryAsync(int id);
 
-        // public Task<List<CourseViewModel>> GetCourseByCategoryAsync(string category);
+        public Task<List<CourseViewModel>> GetCoursesByCategoryAsync(int id);
+        public Task<CourseWithInfoViewModel> GetCourseWithInfoAsync(int id);
+        public Task<List<CourseWithInfoViewModel>> GetCategoryWithCoursesAndInfoAsync(int id);
         public Task AddCourseAsync(PostCourseViewModel model);
         public Task UpdateCourseAsync(int id, PostCourseViewModel model);
         public void DeleteCourse(int id);

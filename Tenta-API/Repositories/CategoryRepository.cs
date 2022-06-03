@@ -38,13 +38,13 @@ namespace Tenta_API.Repositories
 
     public async Task<List<CategoryWithCoursesViewModel>> GetCategoryWithCoursesAsync()
     {
-      return await _context.Categories.Include(co => co.Courses)
+      var courses = await _context.Categories.Include(co => co.Courses)
         .Select(ccvm => new CategoryWithCoursesViewModel
         {
           CategoryId = ccvm.Id,
           CategoryName = ccvm.Name,
           Courses = ccvm.Courses
-            .Select(com => new CourseViewModel
+            .Select(com => new CourseWithInfoViewModel
             {
               CourseId = com.Id,
               CourseNumber = com.Number,
@@ -53,9 +53,13 @@ namespace Tenta_API.Repositories
               CourseDetails = com.Details,
               CourseCategoryId = com.CategoryId,
               CourseLengthId = com.LengthId,
-              CourseIsVideo = com.IsVideo
+              CourseIsVideo = com.IsVideo,
+              CourseVideoDescription = (com.IsVideo) ? $"Detta är en videokurs som är {com.Length.Hours} timmar och {com.Length.Minutes} minuter lång." : $"Detta är en vanlig kurs som är {com.Length.Days} dagar lång."
             }).ToList()
         }).ToListAsync();
+
+
+        return courses;
     }
 
     public async Task UpdateCategoryAsync(PostCategoryViewModel model, int id)

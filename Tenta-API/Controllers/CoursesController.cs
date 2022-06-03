@@ -30,7 +30,7 @@ namespace Tenta_API.Controllers
       }
 
       await _courseRepo.AddCourseAsync(model);
-      if(await _courseRepo.SaveAllAsync())
+      if (await _courseRepo.SaveAllAsync())
       {
         return StatusCode(201);
       }
@@ -55,6 +55,7 @@ namespace Tenta_API.Controllers
 
         return Ok(response);
       }
+
       catch (Exception ex)
       {
         return StatusCode(500, ex.Message);
@@ -80,18 +81,48 @@ namespace Tenta_API.Controllers
       return Ok(response);
     }
 
-    // [HttpGet("bycategory/{category}")]
-    // public async Task<List<CourseViewModel>> GetCourseByCategory(string category)
-    // {
-    //   var response = await _courseRepo.GetCourseByCategoryAsync(category);
-    //   return response;
-    // }
+    [HttpGet("bycategory/{id}")]
+    public async Task<ActionResult<List<CourseViewModel>>> GetCoursesByCategory(int id)
+    {
+      try
+      {
+        var response = await _courseRepo.GetCoursesByCategoryAsync(id);
+        if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med kategori-id: {id}.");
+
+        return Ok(response);
+
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, ex.Message);
+      }
+
+      // return StatusCode(201, "hej");
+    }
 
     [HttpGet("withcategory/{id}")]
     public async Task<ActionResult<CourseWithCategoryViewModel>> GetCourseWithCategory(int id)
     {
       var response = await _courseRepo.GetCourseWithCategoryAsync(id);
       if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med id: {id}.");
+
+      return Ok(response);
+    }
+
+    [HttpGet("withinfo/{id}")]
+    public async Task<ActionResult<List<CourseWithInfoViewModel>>> GetCourseWithInfo(int id)
+    {
+      var response = await _courseRepo.GetCourseWithInfoAsync(id);
+      if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med id: {id}.");
+
+      return Ok(response);
+    }
+
+    [HttpGet("categorywithcourseandinfo/{id}")]
+    public async Task<ActionResult<List<CourseWithInfoViewModel>>> GetCategorieWithCoursesAndInfo(int id)
+    {
+      var response = await _courseRepo.GetCategoryWithCoursesAndInfoAsync(id);
+      if (response is null) return NotFound($"Vi kunde inte hitta någon kategori med id: {id}.");
 
       return Ok(response);
     }

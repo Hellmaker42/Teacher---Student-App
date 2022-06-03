@@ -1,0 +1,21 @@
+@model IEnumerable<MvcUser.ViewModels.CourseWithInfoViewModel>
+
+@{
+  ViewData["Title"] = "Våra Kurser";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<article>
+  <section>
+    @foreach (var course in Model)
+    {
+      <div>
+        <a asp-controller="Course" asp-action="Details" asp-route-id="@course.CourseId">@course.CourseTitle</a>
+        <p>Kursnummer: @course.CourseNumber</p>
+        <p>@course.CourseVideoDescription</p>
+        <br>
+      </div>
+    }
+  </section>
+</article>

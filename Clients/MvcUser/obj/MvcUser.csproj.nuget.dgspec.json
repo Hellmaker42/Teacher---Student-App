@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Code-net\\Tenta\\clients\\MvcUser\\MvcUser.csproj": {}
+    "E:\\Code-net\\Tenta\\Clients\\MvcUser\\MvcUser.csproj": {}
   },
   "projects": {
-    "E:\\Code-net\\Tenta\\clients\\MvcUser\\MvcUser.csproj": {
+    "E:\\Code-net\\Tenta\\Clients\\MvcUser\\MvcUser.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Code-net\\Tenta\\clients\\MvcUser\\MvcUser.csproj",
+        "projectUniqueName": "E:\\Code-net\\Tenta\\Clients\\MvcUser\\MvcUser.csproj",
         "projectName": "MvcUser",
-        "projectPath": "E:\\Code-net\\Tenta\\clients\\MvcUser\\MvcUser.csproj",
+        "projectPath": "E:\\Code-net\\Tenta\\Clients\\MvcUser\\MvcUser.csproj",
         "packagesPath": "C:\\Users\\hellm\\.nuget\\packages\\",
-        "outputPath": "E:\\Code-net\\Tenta\\clients\\MvcUser\\obj\\",
+        "outputPath": "E:\\Code-net\\Tenta\\Clients\\MvcUser\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\hellm\\AppData\\Roaming\\NuGet\\NuGet.Config",
