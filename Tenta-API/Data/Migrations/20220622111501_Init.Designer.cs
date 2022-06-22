@@ -10,43 +10,13 @@ using Tenta_API.Data;
 namespace Tenta_API.Data.Migrations
 {
     [DbContext(typeof(CourseContext))]
-    [Migration("20220530153432_LaTillDetSistaIDatabasen")]
-    partial class LaTillDetSistaIDatabasen
+    [Migration("20220622111501_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
-
-            modelBuilder.Entity("CourseStudent", b =>
-                {
-                    b.Property<int>("CoursesId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CoursesId", "StudentsId");
-
-                    b.HasIndex("StudentsId");
-
-                    b.ToTable("CourseStudent");
-                });
-
-            modelBuilder.Entity("QualificationTeacher", b =>
-                {
-                    b.Property<int>("QualificationsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TeachersId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("QualificationsId", "TeachersId");
-
-                    b.HasIndex("TeachersId");
-
-                    b.ToTable("QualificationTeacher");
-                });
 
             modelBuilder.Entity("Tenta_API.Model.Address", b =>
                 {
@@ -63,10 +33,16 @@ namespace Tenta_API.Data.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Zipcode")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Addresses");
                 });
@@ -155,13 +131,10 @@ namespace Tenta_API.Data.Migrations
                     b.ToTable("Qualifications");
                 });
 
-            modelBuilder.Entity("Tenta_API.Model.Student", b =>
+            modelBuilder.Entity("Tenta_API.Model.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
@@ -176,69 +149,23 @@ namespace Tenta_API.Data.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("Tenta_API.Model.Teacher", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<bool>("StudentOrTeacher")
                         .HasColumnType("INTEGER");
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
-                    b.ToTable("Teachers");
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("CourseStudent", b =>
+            modelBuilder.Entity("Tenta_API.Model.Address", b =>
                 {
-                    b.HasOne("Tenta_API.Model.Course", null)
-                        .WithMany()
-                        .HasForeignKey("CoursesId")
+                    b.HasOne("Tenta_API.Model.User", "User")
+                        .WithOne("Address")
+                        .HasForeignKey("Tenta_API.Model.Address", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tenta_API.Model.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("QualificationTeacher", b =>
-                {
-                    b.HasOne("Tenta_API.Model.Qualification", null)
-                        .WithMany()
-                        .HasForeignKey("QualificationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Tenta_API.Model.Teacher", null)
-                        .WithMany()
-                        .HasForeignKey("TeachersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Tenta_API.Model.Course", b =>
@@ -250,7 +177,7 @@ namespace Tenta_API.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("Tenta_API.Model.Length", "Length")
-                        .WithMany()
+                        .WithMany("Courses")
                         .HasForeignKey("LengthId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -260,31 +187,19 @@ namespace Tenta_API.Data.Migrations
                     b.Navigation("Length");
                 });
 
-            modelBuilder.Entity("Tenta_API.Model.Student", b =>
-                {
-                    b.HasOne("Tenta_API.Model.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("Tenta_API.Model.Teacher", b =>
-                {
-                    b.HasOne("Tenta_API.Model.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-                });
-
             modelBuilder.Entity("Tenta_API.Model.Category", b =>
                 {
                     b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Tenta_API.Model.Length", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Tenta_API.Model.User", b =>
+                {
+                    b.Navigation("Address");
                 });
 #pragma warning restore 612, 618
         }

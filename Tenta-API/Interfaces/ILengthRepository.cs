@@ -10,6 +10,7 @@ namespace Tenta_API.Interfaces
     {
         public Task AddLengthAsync(PostLengthViewModel model);
         public Task UpdateLengthAsync(PostLengthViewModel model, int id);
+        public void DeleteLengthAsync(int id);
         public Task<bool> SaveAllChangesAsync();
     }
 }

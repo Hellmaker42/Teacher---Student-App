@@ -43,5 +43,17 @@ namespace Tenta_API.Controllers
         return StatusCode(500, ex.Message);
       }
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteLength(int id)
+    {
+      _lengthRepo.DeleteLengthAsync(id);
+
+      if (await _lengthRepo.SaveAllChangesAsync())
+      {
+        return NoContent();
+      }
+      return StatusCode(500, "Något gick fel.");
+    }
   }
 }

@@ -13,6 +13,7 @@ namespace Tenta_API.Interfaces
         public Task<CategoryViewModel> GetCategoryByIdAsync(int id);
         public Task<List<CategoryWithCoursesViewModel>> GetCategoryWithCoursesAsync();
         public Task UpdateCategoryAsync(PostCategoryViewModel model, int id);
+        public void DeleteCategoryAsync(int id);
         public Task<bool> SaveAllChangesAsync();
     }
 }

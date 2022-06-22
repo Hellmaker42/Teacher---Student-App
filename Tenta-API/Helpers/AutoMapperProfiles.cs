@@ -5,7 +5,7 @@ using Tenta_API.ViewModel.Address;
 using Tenta_API.ViewModel.Category;
 using Tenta_API.ViewModel.Course;
 using Tenta_API.ViewModel.Length;
-using Tenta_API.ViewModel.Student;
+using Tenta_API.ViewModel.User;
 
 namespace Tenta_API.Helpers
 {
@@ -31,15 +31,15 @@ namespace Tenta_API.Helpers
 
       CreateMap<PostLengthViewModel, Length>();
 
-      CreateMap<PostStudentViewModel, Student>();
-      CreateMap<Student, StudentViewModel>()
-        .ForMember(dest => dest.StudentFirstName, options => options.MapFrom(src => src.FirstName))
-        .ForMember(dest => dest.StudentLastName, options => options.MapFrom(src => src.LastName))
-        .ForMember(dest => dest.StudentEmail, options => options.MapFrom(src => src.Email))
-        .ForMember(dest => dest.StudentPhone, options => options.MapFrom(src => src.Phone))
-        .ForMember(dest => dest.StudentPhone, options => options.MapFrom(src => src.Phone))
+      CreateMap<PostUserViewModel, User>();
+      CreateMap<User, UserViewModel>()
+        .ForMember(dest => dest.UserFirstName, options => options.MapFrom(src => src.FirstName))
+        .ForMember(dest => dest.UserLastName, options => options.MapFrom(src => src.LastName))
+        .ForMember(dest => dest.UserEmail, options => options.MapFrom(src => src.Email))
+        .ForMember(dest => dest.UserPhone, options => options.MapFrom(src => src.Phone))
+        .ForMember(dest => dest.UserPhone, options => options.MapFrom(src => src.Phone));
         // .ForMember(dest => dest.StudentAddress, options => options.MapFrom(src => src.Address))
-        .ForMember(dest => dest.StudentCourses, options => options.MapFrom(src => src.Courses));
+        // .ForMember(dest => dest.StudentCourses, options => options.MapFrom(src => src.Courses));
 
       CreateMap<PostAddressViewModel, Address>();
       CreateMap<Address, AddressViewModel>()

@@ -54,7 +54,7 @@ namespace Tenta_API.Repositories
               CourseCategoryId = com.CategoryId,
               CourseLengthId = com.LengthId,
               CourseIsVideo = com.IsVideo,
-              CourseVideoDescription = (com.IsVideo) ? $"Detta är en videokurs som är {com.Length.Hours} timmar och {com.Length.Minutes} minuter lång." : $"Detta är en vanlig kurs som är {com.Length.Days} dagar lång."
+              CourseVideoDescription = (com.IsVideo) ? $"Detta är en videokurs som är {com.Length!.Hours} timmar och {com.Length.Minutes} minuter lång." : $"Detta är en vanlig kurs som är {com.Length!.Days} dagar lång."
             }).ToList()
         }).ToListAsync();
 
@@ -73,6 +73,16 @@ namespace Tenta_API.Repositories
       }
 
       _context.Update(response);
+    }
+
+    public void DeleteCategoryAsync(int id)
+    {
+      var response = _context.Categories.Find(id);
+
+      if(response is not null)
+      {
+        _context.Categories.Remove(response);
+      }
     }
 
     public async Task<bool> SaveAllChangesAsync()

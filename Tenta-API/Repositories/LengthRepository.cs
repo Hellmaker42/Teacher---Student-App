@@ -38,6 +38,16 @@ namespace Tenta_API.Repositories
       _context.Update(length);
     }
 
+    public void DeleteLengthAsync(int id)
+    {
+      var response = _context.Lengths.Find(id);
+
+      if(response is not null)
+      {
+        _context.Lengths.Remove(response);
+      }
+    }
+
     public async Task<bool> SaveAllChangesAsync()
     {
       return await _context.SaveChangesAsync() > 0;

@@ -23,7 +23,20 @@ namespace Tenta_API.Repositories
     public async Task AddCourseAsync(PostCourseViewModel model)
     {
       var courseToAdd = _mapper.Map<Course>(model);
+      // Category category = new Category{
+      //   Name = courseToAdd.Category!.Name
+      // };
+      // Length length = new Length{
+      //   Days = courseToAdd.Length!.Days,
+      //   Hours = courseToAdd.Length.Hours,
+      //   Minutes = courseToAdd.Length.Minutes
+      // };
+      Category category = _mapper.Map<Category>(courseToAdd.Category!);
+      Length length = _mapper.Map<Length>(courseToAdd.Length!);
+
       await _context.Courses.AddAsync(courseToAdd);
+      await _context.Categories.AddAsync(category);
+      await _context.Lengths.AddAsync(length);
     }
 
 
@@ -122,7 +135,7 @@ namespace Tenta_API.Repositories
           CourseIsVideo = cm.IsVideo,
           CourseLengthId = cm.LengthId,
           CourseCategoryId = cm.CategoryId,
-          CourseVideoDescription = (cm.IsVideo) ? $"Detta är en videokurs som är {cm.Length.Hours} timmar och {cm.Length.Minutes} minuter lång." : $"Detta är en vanlig kurs som är {cm.Length.Days} dagar lång."
+          CourseVideoDescription = (cm.IsVideo) ? $"Detta är en videokurs som är {cm.Length!.Hours} timmar och {cm.Length.Minutes} minuter lång." : $"Detta är en vanlig kurs som är {cm.Length!.Days} dagar lång."
         }).ToListAsync();
 
     }
