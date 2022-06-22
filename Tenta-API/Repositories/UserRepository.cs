@@ -40,19 +40,22 @@ namespace Tenta_API.Repositories
       await _context.Users.AddAsync(userToAdd);
       await _context.SaveChangesAsync();
 
-      var addressToAdd = new Address();
-      addressToAdd.Street = studentModel.Street;
-      addressToAdd.Number = studentModel.Number;
-      addressToAdd.Zipcode = studentModel.Zipcode;
-      addressToAdd.City = studentModel.City;
+      // var addressToAdd = new Address();
+      // addressToAdd.Street = studentModel.Street;
+      // addressToAdd.Number = studentModel.Number;
+      // addressToAdd.Zipcode = studentModel.Zipcode;
+      // addressToAdd.City = studentModel.City;
+      // addressToAdd.User = new User
+      // {
+      //   FirstName = studentModel.FirstName,
+      //   LastName = studentModel.LastName,
+      //   Email = studentModel.Email,
+      //   Phone = studentModel.Phone,
+      //   StudentOrTeacher = studentModel.StudentOrTeacher
+      // };
 
-      // await _addressRepo.AddAddressAsync(addressToAdd);
-      await _context.Addresses.AddAsync(addressToAdd);
-      await _context.SaveChangesAsync();
-      // await _addressRepo.SaveAllAsync();
-
-      // userToAdd.AddressId = _context.Addresses.OrderBy(c => c.Id).Last().Id;
       // await _context.Addresses.AddAsync(addressToAdd);
+      // await _context.SaveChangesAsync();
 
     }
 
@@ -73,15 +76,15 @@ namespace Tenta_API.Repositories
     //   await _context.CourseStudent.AddAsync(courseStudent);
     // }
 
-    // public void DeleteStudent(int id)
-    // {
-    //   var student = _context.Users.Find(id);
+    public void DeleteStudent(int id)
+    {
+      var student = _context.Users.Find(id);
 
-    //   if(student is not null)
-    //   {
-    //     _addressRepo.DeleteAddress(student.AddressId);
-    //   }
-    // }
+      if(student is not null)
+      {
+        _context.Users.Remove(student);
+      }
+    }
 
     public async Task<bool> SaveAllAsync()
     {

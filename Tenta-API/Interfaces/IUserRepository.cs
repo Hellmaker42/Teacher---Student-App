@@ -8,7 +8,7 @@ namespace Tenta_API.Interfaces
     public Task AddStudentAsync(PostUserViewModel studentModel);
     public Task<List<UserViewModel>> GetAllStudentsAsync();
     // public Task AddCourseToStudentAsync(AddCourseToStudentViewModel studentCourse);
-    // public void DeleteStudent(int id);
+    public void DeleteStudent(int id);
     public Task<bool> SaveAllAsync();
   }
 }

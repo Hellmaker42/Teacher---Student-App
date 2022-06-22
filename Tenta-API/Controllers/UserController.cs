@@ -55,16 +55,16 @@ namespace Tenta_API.Controllers
     //   return StatusCode(500, "Det gick inte att spara eleven.");
     // }
 
-    // [HttpDelete("{id}")]
-    // public async Task<ActionResult> DeleteAddress(int id)
-    // {
-    //   _userRepo.DeleteStudent(id);
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteAddress(int id)
+    {
+      _userRepo.DeleteStudent(id);
 
-    //   if (await _userRepo.SaveAllAsync())
-    //   {
-    //     return NoContent();
-    //   }
-    //   return StatusCode(500, "Något gick fel.");
-    // }
+      if (await _userRepo.SaveAllAsync())
+      {
+        return NoContent();
+      }
+      return StatusCode(500, "Något gick fel.");
+    }
   }
 }
