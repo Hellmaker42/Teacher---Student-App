@@ -124,6 +124,18 @@ namespace Tenta_API.Repositories
 
     public async Task<List<CourseWithInfoViewModel>> GetCategoryWithCoursesAndInfoAsync(int id)
     {
+      // return await _context.Courses.Where(c => c.CategoryId == id)
+      //   .Select(cm => new CourseWithInfoViewModel{
+      //     CourseId = cm.Id,
+      //     CourseNumber = cm.Number,
+      //     CourseTitle = cm.Title,
+      //     CourseDescription = cm.Description,
+      //     CourseDetails = cm.Description,
+      //     CourseIsVideo = cm.IsVideo,
+      //     CourseLengthId = cm.LengthId,
+      //     CourseCategoryId = cm.CategoryId,
+      //     CourseVideoDescription = (cm.IsVideo) ? $"Detta är en videokurs som är {cm.Length!.Hours} timmar och {cm.Length.Minutes} minuter lång." : $"Detta är en vanlig kurs som är {cm.Length!.Days} dagar lång."
+      //   }).ToListAsync();
 
       return await _context.Courses.Where(c => c.CategoryId == id)
         .Select(cm => new CourseWithInfoViewModel{
@@ -135,6 +147,7 @@ namespace Tenta_API.Repositories
           CourseIsVideo = cm.IsVideo,
           CourseLengthId = cm.LengthId,
           CourseCategoryId = cm.CategoryId,
+          CategoryName = cm.Category!.Name,
           CourseVideoDescription = (cm.IsVideo) ? $"Detta är en videokurs som är {cm.Length!.Hours} timmar och {cm.Length.Minutes} minuter lång." : $"Detta är en vanlig kurs som är {cm.Length!.Days} dagar lång."
         }).ToListAsync();
 

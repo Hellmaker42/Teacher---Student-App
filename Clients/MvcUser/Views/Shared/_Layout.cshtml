@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,12 +9,19 @@
   <link rel="stylesheet" href="~/css/styles.css">
   <title>Document</title>
 </head>
+
 <body>
   <header>
     <nav>
       <ul>
         <li>
-          <a asp-controller="Course" asp-action="index">Våra Kurser</a>
+          <a asp-controller="Course" asp-action="index">Våra Kurser</a> <a asp-controller="Student" asp-action="CreateStudent">Registrera dig</a>
+          @{
+            if(MvcUser.Class.Session.Email is not null)
+            {
+              <p>Inloggad som @MvcUser.Class.Session.Email</p>
+            }
+          }
         </li>
       </ul>
     </nav>

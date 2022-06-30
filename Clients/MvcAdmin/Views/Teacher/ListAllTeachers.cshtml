@@ -1,0 +1,26 @@
+@model IEnumerable<MvcAdmin.ViewModels.UserViewModel>
+
+@{
+  ViewBag.PageTitle = "Registrerade Lärare";
+}
+
+<h1>@ViewBag.PageTitle</h1>
+
+<article>
+  <section>
+    <br>
+    @foreach (var teacher in Model)
+    {
+      <div>
+        <p>@teacher.UserFirstName @teacher.UserLastName</p>
+        <p>@teacher.UserEmail</p>
+        <p>Telnr: @teacher.UserPhone</p>
+        <p></p>
+        <p> @teacher.UserAddress!.AddressStreet @teacher.UserAddress!.AddressNumber</p>
+        <p>@teacher.UserAddress!.AddressZipCode @teacher.UserAddress.AddressCity</p>
+        <p><a asp-action="DeleteTeacher" asp-route-id="@teacher.UserId">Ta bort</a> <a asp-action="EditTeacher" asp-route-id="@teacher.UserId">Uppdatera</a></p>
+        <br>
+      </div>
+    }
+  </section>
+</article>

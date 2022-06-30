@@ -1,22 +1,18 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Tenta_API.Data;
 using Tenta_API.Interfaces;
-using Tenta_API.Model;
-using Tenta_API.ViewModel;
 using Tenta_API.ViewModel.Course;
 
 namespace Tenta_API.Controllers
 {
   [ApiController]
   [Route("api/v1/courses")]
-  public class CoursesController : ControllerBase
+  public class CourseController : ControllerBase
   {
 
     private readonly ICourseRepository _courseRepo;
     private readonly IMapper _mapper;
-    public CoursesController(ICourseRepository courseRepo, IMapper mapper)
+    public CourseController(ICourseRepository courseRepo, IMapper mapper)
     {
       _mapper = mapper;
       _courseRepo = courseRepo;

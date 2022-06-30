@@ -33,13 +33,13 @@ namespace Tenta_API.Helpers
 
       CreateMap<PostUserViewModel, User>();
       CreateMap<User, UserViewModel>()
+        .ForMember(dest => dest.UserId, options => options.MapFrom(src => src.Id))
         .ForMember(dest => dest.UserFirstName, options => options.MapFrom(src => src.FirstName))
         .ForMember(dest => dest.UserLastName, options => options.MapFrom(src => src.LastName))
         .ForMember(dest => dest.UserEmail, options => options.MapFrom(src => src.Email))
         .ForMember(dest => dest.UserPhone, options => options.MapFrom(src => src.Phone))
-        .ForMember(dest => dest.UserPhone, options => options.MapFrom(src => src.Phone));
-        // .ForMember(dest => dest.StudentAddress, options => options.MapFrom(src => src.Address))
-        // .ForMember(dest => dest.StudentCourses, options => options.MapFrom(src => src.Courses));
+        .ForMember(dest => dest.UserStudentOrTeacher, options => options.MapFrom(src => src.StudentOrTeacher))
+        .ForMember(dest => dest.UserAddress, options => options.MapFrom(src => src.Address));
 
       CreateMap<PostAddressViewModel, Address>();
       CreateMap<Address, AddressViewModel>()

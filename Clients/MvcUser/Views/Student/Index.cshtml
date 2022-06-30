@@ -1,0 +1,21 @@
+@model IEnumerable<MvcUser.ViewModels.UserViewModel>
+
+@{
+  ViewData["Title"] = "Regestrerade Elever";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<article>
+  <section>
+    @foreach (var student in Model)
+    {
+      <div>
+        <p>@student.UserFirstName @student.UserLastName</p>
+        <p>Email: @student.UserEmail</p>
+        <p>Phonenumber: @student.UserPhone</p>
+        <br>
+      </div>
+    }
+  </section>
+</article>

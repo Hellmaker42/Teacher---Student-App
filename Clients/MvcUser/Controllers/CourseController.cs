@@ -1,13 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using MvcUser.Models;
-using MvcUser.ViewModels;
 
 namespace MvcUser.Controllers
 {

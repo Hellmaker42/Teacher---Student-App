@@ -11,5 +11,6 @@ namespace Tenta_API.ViewModel.Course
     public int CourseCategoryId { get; set; }
     public int CourseLengthId { get; set; }
     public string? CourseVideoDescription { get; set; }
+    public string? CategoryName { get; set; }
   }
 }

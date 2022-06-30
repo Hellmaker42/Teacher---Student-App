@@ -9,13 +9,13 @@ using Tenta_API.ViewModel.User;
 
 namespace Tenta_API.Repositories
 {
-  public class UserRepository : IUserRepository
+  public class StudentRepository : IStudentRepository
   {
     private readonly IMapper _mapper;
     private readonly CourseContext _context;
     private readonly IAddressRepository _addressRepo;
 
-    public UserRepository(CourseContext context, IMapper mapper, IAddressRepository addressRepo)
+    public StudentRepository(CourseContext context, IMapper mapper, IAddressRepository addressRepo)
     {
       _addressRepo = addressRepo;
       _context = context;
@@ -38,30 +38,46 @@ namespace Tenta_API.Repositories
         City = studentModel.City
       };
       await _context.Users.AddAsync(userToAdd);
-      await _context.SaveChangesAsync();
-
-      // var addressToAdd = new Address();
-      // addressToAdd.Street = studentModel.Street;
-      // addressToAdd.Number = studentModel.Number;
-      // addressToAdd.Zipcode = studentModel.Zipcode;
-      // addressToAdd.City = studentModel.City;
-      // addressToAdd.User = new User
-      // {
-      //   FirstName = studentModel.FirstName,
-      //   LastName = studentModel.LastName,
-      //   Email = studentModel.Email,
-      //   Phone = studentModel.Phone,
-      //   StudentOrTeacher = studentModel.StudentOrTeacher
-      // };
-
-      // await _context.Addresses.AddAsync(addressToAdd);
-      // await _context.SaveChangesAsync();
-
     }
 
     public async Task<List<UserViewModel>> GetAllStudentsAsync()
     {
-      return await _context.Users.ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+      return await _context.Users.ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).Where(u => u.UserStudentOrTeacher == false).ToListAsync();
+    }
+
+    public async Task<UserViewModel> GetStudentByIdAsync(int id)
+    {
+      return await _context.Users.Include(u => u.Address).Where(a => a.Address!.Id == a.Id).Where(u => u.Id == id).ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).FirstAsync();
+    }
+
+public async Task UpdateStudentAsync(int id, PostUserViewModel studentModel)
+    {
+      var oldStudent = await _context.Users.FindAsync(id);
+
+      if (oldStudent is not null)
+      {
+        oldStudent.FirstName = studentModel.FirstName;
+        oldStudent.LastName = studentModel.LastName;
+        oldStudent.Email = studentModel.Email;
+        oldStudent.Phone = studentModel.Phone;
+        oldStudent.StudentOrTeacher = studentModel.StudentOrTeacher;
+        _context.Update(oldStudent);
+
+        var oldAddress = await _context.Addresses.FindAsync(id);
+
+        if(oldAddress is not null)
+        {
+          oldAddress.Street = studentModel.Street;
+          oldAddress.Number = studentModel.Number;
+          oldAddress.Zipcode = studentModel.Zipcode;
+          oldAddress.City = studentModel.City;
+          _context.Update(oldAddress);
+        }
+      }
+      else
+      {
+        throw new Exception($"Vi kunde inte hitta någon lärare med id: {id}");
+      }
     }
 
     // public async Task AddCourseToStudentAsync(AddCourseToStudentViewModel model)
@@ -76,11 +92,11 @@ namespace Tenta_API.Repositories
     //   await _context.CourseStudent.AddAsync(courseStudent);
     // }
 
-    public void DeleteStudent(int id)
+    public async Task DeleteStudentAsync(int id)
     {
-      var student = _context.Users.Find(id);
+      var student = await _context.Users.FindAsync(id);
 
-      if(student is not null)
+      if (student is not null)
       {
         _context.Users.Remove(student);
       }

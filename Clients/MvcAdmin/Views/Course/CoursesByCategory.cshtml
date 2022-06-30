@@ -1,0 +1,21 @@
+@model IEnumerable<MvcAdmin.ViewModels.CourseWithInfoViewModel>
+
+@{
+  ViewBag.PageTitle = "Redigera Kurser";
+  ViewData["Title"] = "Kurser inom " + @Model.First().CategoryName;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<article>
+  <section>
+    @foreach (var course in Model)
+    {
+      <div>
+        <a asp-action="Details" asp-route-id="@course.CourseId">@course.CourseTitle</a>
+        <p>Kursnummer: @course.CourseNumber</p>
+        <br>
+      </div>
+    }
+  </section>
+</article>

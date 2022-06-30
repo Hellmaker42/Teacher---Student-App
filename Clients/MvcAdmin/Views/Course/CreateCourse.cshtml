@@ -1,0 +1,43 @@
+@using MvcAdmin.ViewModels
+@model CreateCourseViewModel
+
+
+<h1 class="page-title">Registrera en ny kurs</h1>
+<section class="form-container">
+  <form class="form" asp-action="CreateCourser" method="post">
+    <div class="form-control">
+      <label asp-for="@Model.Number">Kursnummer</label>
+      <input asp-for="@Model.Number" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model.Title">Titel</label>
+      <input asp-for="@Model.Title" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.Description">Beskrivning</label>
+      <input asp-for="@Model!.Description" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.Details">Detaljer</label>
+      <input asp-for="@Model!.Details" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.IsVideo">Är detta en videokurs</label>
+      <input type="radio" name="IsVideo" value="true" id="yes" asp-for="@Model!.IsVideo" />
+      <label for="yes">Ja</label>
+      <input type="radio" name="IsVideo" value="false" id="no" asp-for="@Model!.IsVideo" />
+      <label for="no">Nej</label>
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.Category">Vilken kategori tillhör kursen</label>
+      <select name="products" class="form-control" asp-items="@ViewBag.Categories" asp-for="@Model!.Category"></select>
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.Category">Skapa ny kategori om den inte finns i listan ovan</label>
+      <input type="text" id="qta_field" value="" />
+      <a href='' onclick="this.href='CreateCategory?catName='+document.getElementById('qta_field').value">Lägg till kategori</a>
+    </div>
+
+    <button type="submit" class="btn">Spara</button>
+  </form>
+</section>

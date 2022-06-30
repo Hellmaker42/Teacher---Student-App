@@ -1,0 +1,43 @@
+@model MvcAdmin.ViewModels.UserViewModel
+
+<h1 class="page-title">Uppdatera student</h1>
+<section class="form-container">
+  <form class="form" asp-action="UpdateStudent" asp-route-id="@Model.UserId" method="post">
+    <div class="form-control">
+      <label asp-for="@Model.UserFirstName">Förnamn</label>
+      <input asp-for="@Model.UserFirstName" />
+    </div>
+    <div class="form-control">
+      <input type="hidden" asp-for="@Model.UserStudentOrTeacher">
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model.UserLastName">Efternamn</label>
+      <input asp-for="@Model.UserLastName" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.UserEmail">Epost-adress</label>
+      <input asp-for="@Model!.UserEmail" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.UserPhone">Telefonnummer</label>
+      <input asp-for="@Model!.UserPhone" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.UserAddress!.AddressStreet">Gatuadress</label>
+      <input asp-for="@Model!.UserAddress!.AddressStreet" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.UserAddress!.AddressNumber">Gatunummer</label>
+      <input asp-for="@Model!.UserAddress!.AddressNumber" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.UserAddress!.AddressZipCode">Postnummer</label>
+      <input asp-for="@Model!.UserAddress!.AddressZipCode" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.UserAddress!.AddressCity">Ort</label>
+      <input asp-for="@Model!.UserAddress!.AddressCity">
+    </div>
+    <button type="submit" class="btn">Spara</button> <a asp-controller="Student" asp-action="GetAllStudents">Tillbaka till listan</a>
+  </form>
+</section>

@@ -1,0 +1,40 @@
+@model MvcUser.ViewModels.CreateUserViewModel
+
+<h1 class="page-title">Registrera dig som elev</h1>
+<section class="form-container">
+  <form class="form" asp-action="CreateStudent" method="post">
+    <div class="form-control">
+      <label asp-for="@Model.FirstName">Förnamn</label>
+      <input asp-for="@Model.FirstName" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model.LastName">Efternamn</label>
+      <input asp-for="@Model.LastName" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.Email">Epost-adress</label>
+      <input asp-for="@Model!.Email" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.Phone">Telefonnummer</label>
+      <input asp-for="@Model!.Phone" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.Street">Gatuadress</label>
+      <input asp-for="@Model!.Street" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.Number">Gatunummer</label>
+      <input asp-for="@Model!.Number" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.Zipcode">Postnummer</label>
+      <input asp-for="@Model!.Zipcode" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.City">Ort</label>
+      <input asp-for="@Model!.City">
+    </div>
+    <button type="submit" class="btn">Spara</button>
+  </form>
+</section>
