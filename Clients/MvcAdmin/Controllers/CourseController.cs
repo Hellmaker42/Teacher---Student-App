@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MvcAdmin.Models;
 using MvcAdmin.ViewModels;
-using MvcUser.ViewModels;
 
 namespace MvcAdmin.Controllers
 {
@@ -49,20 +48,26 @@ namespace MvcAdmin.Controllers
     [HttpPost("CreateCourse")]
     public async Task<IActionResult> CreateCourse(CreateCourseViewModel courseModel)
     {
-
-      if (!ModelState.IsValid)
+      try
       {
-        // return View("CreateStudent", student);
+        if (!ModelState.IsValid)
+        {
+          return View("Error");
+        }
+
+        if (await _courseService.CreateCourse(courseModel))
+        {
+          return View("Confirmation");
+        }
+        return View("Error");
+        // return View("CreateCourse", courseModel);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.Message);
         return View("Error");
       }
 
-      if (await _courseService.CreateCourse(courseModel))
-      {
-        return View("Confirmation");
-      }
-
-      return View("CreateCourse", courseModel);
-      // return View("Error");
     }
     [Route("CreateCategory")]
     [HttpPost("{catName}")]
@@ -83,6 +88,32 @@ namespace MvcAdmin.Controllers
       }
 
       return View("CreateCourse");
+      // return View("Error");
+    }
+
+    [Route("CreateCategoryFromEdit")]
+    [HttpPost("{info}")]
+    public async Task<IActionResult> CreateCategoryFromEdit(string info)
+    {
+      int breakPointOne = info.IndexOf("?");
+      string catName = info.Substring(0, breakPointOne);
+      int breakPointTwo = info.IndexOf("=");
+      string strId = info.Substring(breakPointTwo+1);
+      int id = Int32.Parse(strId);
+      
+
+      var categoryModel = new CreateCategoryViewModel();
+      categoryModel.Name = catName;
+
+      if (!ModelState.IsValid)
+      {
+        return View("Error");
+      }
+      if (!await _courseService.CreateCategory(categoryModel))
+      {
+        return View("Error");
+      }
+      return await EditCourse(id);
       // return View("Error");
     }
 
@@ -108,6 +139,22 @@ namespace MvcAdmin.Controllers
         // var courseService = new CourseServiceModel(_config);
 
         var categories = await _courseService.GetAllCategories();
+        return View("Categories", categories);
+      }
+      catch (System.Exception)
+      {
+        throw;
+      }
+    }
+
+    [HttpGet("CategoriesWithCourse")]
+    public async Task<IActionResult> GetAllCategoriesWithCourse()
+    {
+      try
+      {
+        // var courseService = new CourseServiceModel(_config);
+
+        var categories = await _courseService.GetAllCategoriesWithCourse();
         return View("Categories", categories);
       }
       catch (System.Exception)
@@ -145,6 +192,16 @@ namespace MvcAdmin.Controllers
     public async Task<IActionResult> EditCourse(int id)
     {
       var course = await _courseService.GetCourseById(id);
+      var categories = await _courseService.GetAllCategories();
+      List<SelectListItem> catList = categories.ConvertAll(a =>
+      {
+        return new SelectListItem()
+        {
+          Text = a.CategoryName,
+          Value = a.CategoryId.ToString()
+        };
+      });
+      ViewBag.Categories = catList;
       return View("EditCourse", course);
     }
 
@@ -152,9 +209,18 @@ namespace MvcAdmin.Controllers
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCourse(int id, CourseViewModel courseModel)
     {
-      var course = await _courseService.UpdateCourse(id, courseModel);
-      // return Ok(course);
-      return View("Confirmation");
+      try
+      {
+        if(await _courseService.UpdateCourse(id, courseModel))
+        {
+          return View("Confirmation");
+        }
+       return View("Error");        
+      }
+      catch (Exception ex)
+      {
+       return View("Error", ex);
+      }
     }
 
     [Route("DeleteCourse")]
@@ -165,8 +231,8 @@ namespace MvcAdmin.Controllers
       {
         await _courseService.DeleteCourse(id);
 
-        var courses = await _courseService.GetAllCourses();
-        return View("ListAllCourses", courses);
+        var categories = await _courseService.GetAllCategoriesWithCourse();
+        return View("Categories", categories);
 
       }
       catch (Exception ex)

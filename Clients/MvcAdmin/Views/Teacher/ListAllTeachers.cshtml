@@ -9,18 +9,27 @@
 <article>
   <section>
     <br>
+    <div> 
     @foreach (var teacher in Model)
     {
-      <div>
-        <p>@teacher.UserFirstName @teacher.UserLastName</p>
-        <p>@teacher.UserEmail</p>
-        <p>Telnr: @teacher.UserPhone</p>
-        <p></p>
-        <p> @teacher.UserAddress!.AddressStreet @teacher.UserAddress!.AddressNumber</p>
-        <p>@teacher.UserAddress!.AddressZipCode @teacher.UserAddress.AddressCity</p>
-        <p><a asp-action="DeleteTeacher" asp-route-id="@teacher.UserId">Ta bort</a> <a asp-action="EditTeacher" asp-route-id="@teacher.UserId">Uppdatera</a></p>
-        <br>
-      </div>
+
+            <p><b>@teacher.UserFirstName @teacher.UserLastName</b></p>
+            <p>@teacher.UserEmail</p>
+            <p>Telnr: @teacher.UserPhone</p>
+            <p> @teacher.UserAddress!.AddressStreet @teacher.UserAddress!.AddressNumber</p>
+            <p>@teacher.UserAddress!.AddressZipCode @teacher.UserAddress.AddressCity</p>
+            <div class="smallerText">Läraren är kvalificerad för följande kurser :<br>
+            @foreach (var item in teacher.UserCourses!)
+            {
+              @item.CourseTitle;<br>
+            }
+            </div>
+
+            <p><a asp-action="DeleteTeacher" asp-route-id="@teacher.UserId">Ta bort</a> <a asp-action="EditTeacher" asp-route-id="@teacher.UserId">Uppdatera</a></p>
+            <br>            
+
+
     }
+    </div> 
   </section>
 </article>

@@ -1,6 +1,6 @@
 // namespace Tenta_API.Model
 // {
-//   public class CourseStudent
+//   public class CourseUser
 //     {
 //         public int CourseId { get; set; }
 //         public Course? Course { get; set; }

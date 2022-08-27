@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace MvcAdmin.ViewModels
 {
   public class PostUserViewModel
@@ -16,5 +11,6 @@ namespace MvcAdmin.ViewModels
     public int Number { get; set; }
     public string? Zipcode { get; set; }
     public string? City { get; set; }
+    public List<PostCourseViewModel>? Courses { get; set; }
   }
 }

@@ -40,17 +40,20 @@ namespace Tenta_API.Controllers
       return Ok(response);
     }
 
+    [HttpGet("CatsWithCourse")]
+    public async Task<ActionResult<List<CategoryViewModel>>> GetAllCategoriesWithCourseAsync()
+    {
+      var response = await _catRepo.GetAllCategoriesWithCourseAsync();
+      return Ok(response);
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<CategoryViewModel>> GetCategoryById(int id)
     {
       return Ok(await _catRepo.GetCategoryByIdAsync(id));
-      // var response = await _catRepo.GetCategoryByIdAsync(id);
-      // if(response.CategoryName == "C++"){
-
-      // }
     }
 
-    [HttpGet("withcourses")]
+    [HttpGet("CatWithCourses")]
     public async Task<ActionResult<List<CategoryWithCoursesViewModel>>> GetCategoryWithCourses()
     {
       try

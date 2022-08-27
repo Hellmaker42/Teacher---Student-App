@@ -50,7 +50,12 @@ namespace Tenta_API.Repositories
       return await _context.Users.Include(u => u.Address).Where(a => a.Address!.Id == a.Id).Where(u => u.Id == id).ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).FirstAsync();
     }
 
-public async Task UpdateStudentAsync(int id, PostUserViewModel studentModel)
+    public async Task<UserViewModel> GetStudentByEmailAsync(string email)
+    {
+      return await _context.Users.Where(u => u.Email!.ToLower() == email.ToLower()).ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).FirstAsync();
+    }
+
+    public async Task UpdateStudentAsync(int id, PostUserViewModel studentModel)
     {
       var oldStudent = await _context.Users.FindAsync(id);
 
@@ -65,7 +70,7 @@ public async Task UpdateStudentAsync(int id, PostUserViewModel studentModel)
 
         var oldAddress = await _context.Addresses.FindAsync(id);
 
-        if(oldAddress is not null)
+        if (oldAddress is not null)
         {
           oldAddress.Street = studentModel.Street;
           oldAddress.Number = studentModel.Number;
@@ -80,17 +85,18 @@ public async Task UpdateStudentAsync(int id, PostUserViewModel studentModel)
       }
     }
 
-    // public async Task AddCourseToStudentAsync(AddCourseToStudentViewModel model)
-    // {
+    public async Task AddCourseToStudentAsync(AddCourseToStudentViewModel model)
+    {
 
-    //   User user = _context.Users.First(x => x.Email!.ToLower() == model.StudentEmail!.ToLower());
+      User user = await _context.Users.FirstAsync(x => x.Email!.ToLower() == model.StudentEmail!.ToLower());
+      Course course = await _context.Courses.FirstAsync(x => x.Id == model.CourseId);
 
-    //   CourseStudent courseStudent = new CourseStudent{
-    //     CourseId = model.CourseId,
-    //     UserId = user.Id
-    //   };
-    //   await _context.CourseStudent.AddAsync(courseStudent);
-    // }
+      user.Course!.Add(course);
+      course.User!.Add(user);
+
+      _context.Users.Update(user);
+      _context.Courses.Update(course);
+    }
 
     public async Task DeleteStudentAsync(int id)
     {

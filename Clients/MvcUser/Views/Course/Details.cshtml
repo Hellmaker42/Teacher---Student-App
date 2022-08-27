@@ -1,7 +1,17 @@
 @model MvcUser.ViewModels.CourseViewModel
 
 <h1>Här är information om @Model.CourseTitle-kursen</h1>
-<p>Title: @Model.CourseTitle </p>
+<p>Title: @Model.CourseTitle</p>
+<p>Kursnummer: @Model.CourseNumber</p>
+<p>Ingår i kategorin: @Model.CourseCategory!.CategoryName</p>
 <p>Beskrivning: @Model.CourseDescription</p>
 <p>Detaljer: @Model.CourseDetails</p>
-<p><a asp-controller="Student" asp-action="AddCorseToStudent" asp-route-id="@Model.CourseId">Lägg till kurs</a></p>
+@if (Model.CourseIsVideo)
+{
+  <p>Detta är en videokurs som är @Model.CourseLength!.LengthHours timmar och @Model.CourseLength!.LengthMinutes minuter lång.</p>
+}
+else
+{
+  <p>Detta är en vanlig kurs som är @Model.CourseLength!.LengthDays dagar lång.</p>
+}
+<p><a asp-controller="Student" asp-action="AddCourseToStudent" asp-route-id="@Model.CourseId">Lägg till kurs</a></p>

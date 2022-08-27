@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MvcAdmin.Models;
 using MvcAdmin.ViewModels;
-using MvcUser.ViewModels;
 
 namespace MvcAdmin.Controllers
 {
@@ -21,48 +20,107 @@ namespace MvcAdmin.Controllers
       return View();
     }
 
-    // public IActionResult Error()
-    // {
-    //   return View();
-    // }
-
     [HttpGet("CreateTeacher")]
     public IActionResult CreateTeacher()
     {
       var teacher = new CreateUserViewModel();
       return View("CreateTeacher", teacher);
-      // return View("Error");
+    }
+
+    [HttpPost("TeacherQual")]
+    public async Task<IActionResult> TeacherQual(CreateUserViewModel teacher)
+    {
+      // Class.Session.Email = teacher.Email;
+      // Class.Session.FirstName = teacher.FirstName;
+      // Class.Session.LastName = teacher.LastName;
+
+      var userModel = await _teacherService.GetTeacherByEmail(teacher.Email);
+
+      Class.UserSession.User = userModel;
+
+      var courses = await _teacherService.GetAllCourses();
+      Class.CoursesSession.Courses = courses;
+
+      return View("TeacherQual", courses);
+    }
+
+    [Route("AddQualToTeacher")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> AddQualToTeacher(int id)
+    {
+      var course = await _teacherService.GetCourseById(id);
+      Class.UserSession.AddCourse(course);
+
+      Class.CoursesSession.RemoveCourse(id);
+      var courses = Class.CoursesSession.Courses;
+      return View("TeacherQual", courses);
+    }
+
+    [Route("RemoveQualFromTeacher")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> RemoveQualFromTeacher(int id)
+    {
+      var course = await _teacherService.GetCourseById(id);
+      Class.CoursesSession.AddCourse(course);
+
+      Class.UserSession.RemoveCourse(id);
+      var courses = Class.CoursesSession.Courses;
+      return View("TeacherQual", courses);
+    }
+
+    [HttpGet("SaveQualToTeacher")]
+    public async Task<IActionResult> SaveQualToTeacher()
+    {
+      // int id = Class.UserSession.User!.UserId;
+      // var teacherModel = Class.UserSession.User;
+      // teacherModel.UserCourses = Class.UserSession.Courses;
+      // await _teacherService.UpdateTeacher(id, teacherModel);
+
+      AddQualToTeacherViewModel qualModel = new();
+      qualModel.TeacherEmail = Class.UserSession.User!.UserEmail;
+      foreach (var course in Class.UserSession.Courses!)
+      {
+        qualModel.CourseIds!.Add(course.CourseId);
+      }
+      await _teacherService.UpdateQualToTeacher(qualModel);
+      Class.UserSession.Courses!.Clear();
+     
+      return View("Confirmation");
+    }
+
+    //TODO:
+    [HttpGet("EditQualToTeacher/{id}")]
+    public async Task<IActionResult> EditQualToTeacher(int id)
+    {
+      var userModel = await _teacherService.GetTeacherById(id);
+      var courses = await _teacherService.GetAllCourses();
+      Class.CoursesSession.Courses = courses;
+
+      return View("EditQualToTeacher", userModel);
     }
 
     [HttpPost("CreateTeacher")]
     public async Task<IActionResult> CreateTeacher(CreateUserViewModel teacher)
     {
-      var teacherModel = new CreateUserViewModel()
+      ViewBag.EmailError = null;
+      teacher.StudentOrTeacher = true;
+      if (await _teacherService.CheckEmail(teacher.Email))
       {
-        FirstName = teacher.FirstName,
-        LastName = teacher.LastName,
-        Email = teacher.Email,
-        Phone = teacher.Phone,
-        StudentOrTeacher = true,
-        Street = teacher.Street,
-        Number = teacher.Number,
-        Zipcode = teacher.Zipcode,
-        City = teacher.City
-      };
+        ViewBag.EmailError = "Epostadressen du angivit finns redan i systemet.";
+        return View("CreateTeacher", teacher);
+      }
 
       if (!ModelState.IsValid)
       {
-        // return View("CreateStudent", student);
         return View("Error");
       }
 
-      if (await _teacherService.CreateTeacher(teacherModel))
+      if (await _teacherService.CreateTeacher(teacher))
       {
-        return View("Confirmation");
+        return await TeacherQual(teacher);
       }
 
       return View("CreateTeacher", teacher);
-      // return View("Error");
     }
 
     [HttpGet("GetAllTeachers")]
@@ -79,15 +137,14 @@ namespace MvcAdmin.Controllers
       }
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetTeacherById(int id)   
+    [HttpGet("GetTeacherById/{id}")]
+    public async Task<IActionResult> GetTeacherById(int id)
     {
       var teacher = await _teacherService.GetTeacherById(id);
       return Ok(teacher);
-    } 
+    }
 
-    [Route("EditTeacher")]
-    [HttpGet("{id}")]
+    [HttpGet("EditTeacher/{id}")]
     public async Task<IActionResult> EditTeacher(int id)
     {
       var teacher = await _teacherService.GetTeacherById(id);
@@ -101,7 +158,22 @@ namespace MvcAdmin.Controllers
       var teacher = await _teacherService.UpdateTeacher(id, teacherModel);
       // return Ok(teacher);
       return View("Confirmation");
-    }    
+    }
+
+    // [Route("AddQualToTeacher")]
+    // [HttpPut("{id}")]
+    // public async Task<IActionResult> AddQualToTeacher(int id)
+    // {
+    //   AddQualToTeacherViewModel model = new AddQualToTeacherViewModel
+    //   {
+    //     CourseId = id,
+    //     TeacherEmail = Class.UserSession.User!.UserEmail
+    //   };
+    //   await _teacherService.AddQualToTeacher(model);
+
+    //   return View("Confirmation");
+    // }  
+
 
     [Route("DeleteTeacher")]
     [HttpDelete("{id}")]

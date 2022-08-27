@@ -8,65 +8,69 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MvcUser
 build_property.RootNamespace = MvcUser
-build_property.ProjectDir = E:\Code-net\Tenta\Clients\MvcUser\
+build_property.ProjectDir = e:\Code-net\Tenta\Clients\MvcUser\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = E:\Code-net\Tenta\Clients\MvcUser
+build_property.MSBuildProjectDirectory = e:\Code-net\Tenta\Clients\MvcUser
 build_property._RazorSourceGeneratorDebug = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Course/CoursesByCategory.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Course/CoursesByCategory.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXENvdXJzZXNCeUNhdGVnb3J5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Course/Details.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Course/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Course/Index.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Course/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ291cnNlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Home/Index.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Home/Privacy.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Shared/Error.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Shared/_ValidationScriptsPartial.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Student/AddedCourse.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Student/AddedCourse.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxBZGRlZENvdXJzZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Student/Confirmation.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Student/Confirmation.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxDb25maXJtYXRpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Student/CreateStudent.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Student/CreateStudent.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxDcmVhdGVTdHVkZW50LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Student/Index.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Student/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/_ViewImports.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Student/ShowCourses.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3R1ZGVudFxTaG93Q291cnNlcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[e:/Code-net/Tenta/Clients/MvcUser/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/_ViewStart.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Code-net/Tenta/Clients/MvcUser/Views/Shared/_Layout.cshtml]
+[e:/Code-net/Tenta/Clients/MvcUser/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-kr7a8mqkd3

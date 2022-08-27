@@ -83,10 +83,9 @@ namespace MvcUser.Models
       return categories ?? new List<CategoryViewModel>();
     }
 
-    public async Task<List<CategoryWithCoursesViewModel>> GetAllCategoriesWithCourses()
+    public async Task<List<CategoryViewModel>> GetAllCategoriesWithCourse()
     {
-      var url = $"{_baseUrl}withcategory";
-
+      var url = $"{_baseUrl}category/CatsWithCourse";
       using var http = new HttpClient();
       var response = await http.GetAsync(url);
 
@@ -95,8 +94,8 @@ namespace MvcUser.Models
         throw new Exception("Det här gick ju inte bra tyvärr..");
       }
 
-      var courses = await response.Content.ReadFromJsonAsync<List<CategoryWithCoursesViewModel>>();
-      return courses ?? new List<CategoryWithCoursesViewModel>();
+      var categories = await response.Content.ReadFromJsonAsync<List<CategoryViewModel>>();
+      return categories ?? new List<CategoryViewModel>();
     }
 
     public async Task<List<CourseWithInfoViewModel>> GetCategorieWithCoursesAndInfo(int id)

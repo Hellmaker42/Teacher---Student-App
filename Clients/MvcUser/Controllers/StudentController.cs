@@ -54,29 +54,26 @@ namespace MvcUser.Controllers
         Street = student.Street,
         Number = student.Number,
         Zipcode = student.Zipcode,
-        City = student.Zipcode
+        City = student.City
       };
 
       if (!ModelState.IsValid)
       {
-        // return View("CreateStudent", student);
         return View("Error");
       }
 
       if (await _studentService.CreateStudent(studentModel))
       {
-        Class.Session.FName = studentModel.FirstName;
-        Class.Session.LName = studentModel.LastName;
         Class.Session.Email = studentModel.Email;
 
         return View("Confirmation");
       }
 
       return View("CreateStudent", student);
-      // return View("Error");
     }
 
-    [HttpPost("AddCorseToStudent/{id}")]
+    [Route("AddCourseToStudent")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> AddCourseToStudent(int id)
     {
       try
@@ -87,16 +84,33 @@ namespace MvcUser.Controllers
           StudentEmail = Class.Session.Email
         };
 
-        await _studentService.AddCourseToStudent(model);
-        return View("AddedCourse");
-
+        if(await _studentService.AddCourseToStudent(model))
+        {
+          return View("AddedCourse");
+        }
+        return View("Error");
       }
       catch (Exception ex)
       {
         Console.WriteLine(ex.Message);
         return View("Error");
       }
+    }
 
+    [Route("ShowCourses")]
+    [HttpGet()]
+    public async Task<IActionResult> GetStudentCourses()
+    {
+      try
+      {
+        var student = await _studentService.GetStudentByEmail();
+        return View("ShowCourses", student);
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.Message);
+        return View("Error");
+      }
     }
   }
 }

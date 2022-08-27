@@ -22,7 +22,6 @@ namespace Tenta_API.Repositories
 
     public async Task AddTeacherAsync(PostUserViewModel teachModel)
     {
-
       var teacherToAdd = new User();
       teacherToAdd.FirstName = teachModel.FirstName;
       teacherToAdd.LastName = teachModel.LastName;
@@ -42,11 +41,45 @@ namespace Tenta_API.Repositories
 
     public async Task<List<UserViewModel>> GetAllTeachersAsync()
     {
-      return await _context.Users.Include(u => u.Address).Where(a => a.Address!.Id == a.Id).Where(u => u.StudentOrTeacher == true).ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+      return await _context.Users.Include(u => u.Address)
+        .Where(a => a.Address!.Id == a.Id)
+        .Where(u => u.StudentOrTeacher == true)
+        .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).ToListAsync();
     }
     public async Task<UserViewModel> GetTeacherByIdAsync(int id)
     {
-      return await _context.Users.Include(u => u.Address).Where(a => a.Address!.Id == a.Id).Where(u => u.Id == id).ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).FirstAsync();
+      return await _context.Users.Include(u => u.Address)
+        .Where(a => a.Address!.Id == a.Id)
+        .Where(u => u.Id == id)
+        .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).FirstAsync();
+    }
+
+    public async Task<UserViewModel> GetTeacherByEmailAsync(string email)
+    {
+      return await _context.Users
+        .Where(u => u.Email!.ToLower() == email.ToLower())
+        .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).FirstAsync();
+    }
+
+    public async Task<bool> CheckEmailAsync(string email)
+    {
+      var user = await _context.Users.Where(u => u.Email!.ToLower() == email!.ToLower()).FirstOrDefaultAsync();
+      if(user is not null)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+
+    public async Task<int> GetLastCreatedTeacherAsync()
+    {
+      var lastTeacher = await _context.Users.Where(u => u.StudentOrTeacher == true).LastAsync();
+      Console.WriteLine(lastTeacher);
+      int teacherId = lastTeacher.Id;
+      return teacherId;
     }
 
     public async Task UpdateTeacherAsync(int id, PostUserViewModel teacherModel)
@@ -64,7 +97,7 @@ namespace Tenta_API.Repositories
 
         var oldAddress = await _context.Addresses.FindAsync(id);
 
-        if(oldAddress is not null)
+        if (oldAddress is not null)
         {
           oldAddress.Street = teacherModel.Street;
           oldAddress.Number = teacherModel.Number;
@@ -92,6 +125,24 @@ namespace Tenta_API.Repositories
       //   City = teacherModel.City
       // };
 
+    }
+
+    public async Task UpdateQualToTeacherAsync(AddQualToTeacherViewModel qualModel)
+    {
+      User user = await _context.Users.FirstAsync(u => u.Email!.ToLower() == qualModel.TeacherEmail!.ToLower());
+      
+      Course course = new();
+
+      for (int i = 0; i < qualModel.CourseIds!.Count; i++)
+      {
+        course = await _context.Courses.FirstAsync(c => c.Id == qualModel.CourseIds[i]);
+        
+        user.Course!.Add(course);
+        course.User!.Add(user);
+      }
+
+      _context.Users.Update(user);
+      _context.Courses.Update(course);
     }
 
     public async Task DeleteTeacherAsync(int id)

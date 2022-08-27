@@ -11,11 +11,13 @@ namespace Tenta_API.Controllers
   {
 
     private readonly ICourseRepository _courseRepo;
+    private readonly ICategoryRepository _catRepo;
     private readonly IMapper _mapper;
-    public CourseController(ICourseRepository courseRepo, IMapper mapper)
+    public CourseController(ICourseRepository courseRepo, ICategoryRepository catRepo, IMapper mapper)
     {
       _mapper = mapper;
       _courseRepo = courseRepo;
+      _catRepo = catRepo;
     }
     [HttpPost()]
     public async Task<ActionResult> AddCourse(PostCourseViewModel model)
@@ -24,6 +26,15 @@ namespace Tenta_API.Controllers
       {
         return BadRequest($"Kursnummer {model.Number} finns redan i systemet.");
       }
+
+      var category = await _catRepo.GetCategoryByNameAsync(model.Category!.Name!);
+
+      if (category is not null)
+      {
+        model.Category = null;
+        model.CategoryId = category.CategoryId;
+      }
+
 
       await _courseRepo.AddCourseAsync(model);
       if (await _courseRepo.SaveAllAsync())
@@ -41,12 +52,19 @@ namespace Tenta_API.Controllers
       return Ok(response);
     }
 
+    // [HttpGet("CoursesToTeacher")]
+    // public async Task<ActionResult<List<CourseViewModel>>> GetCoursesToTeacher()
+    // {
+    //   var response = await _courseRepo.GetAllCoursesAsync();
+    //   return Ok(response);
+    // }
+
     [HttpGet("{id}")]
-    public async Task<ActionResult<CourseViewModel>> GetCourse(int id)
+    public async Task<ActionResult<CourseViewModel>> GetCourseById(int id)
     {
       try
       {
-        var response = await _courseRepo.GetCourseAsync(id);
+        var response = await _courseRepo.GetCourseByIdAsync(id);
         if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med id: {id}.");
 
         return Ok(response);

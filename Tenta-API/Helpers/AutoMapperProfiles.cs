@@ -22,7 +22,7 @@ namespace Tenta_API.Helpers
         .ForMember(dest => dest.CourseDetails, options => options.MapFrom(src => src.Details))
         .ForMember(dest => dest.CourseIsVideo, options => options.MapFrom(src => src.IsVideo))
         .ForMember(dest => dest.CourseCategoryId, options => options.MapFrom(src => src.CategoryId))
-        .ForMember(dest => dest.CourseLengthId, options => options.MapFrom(src => src.LengthId));
+        .ForMember(dest => dest.CourseCategory, options => options.MapFrom(src => src.Category));
         
       CreateMap<PostCategoryViewModel, Category>();
       CreateMap<Category, CategoryViewModel>()
@@ -39,7 +39,8 @@ namespace Tenta_API.Helpers
         .ForMember(dest => dest.UserEmail, options => options.MapFrom(src => src.Email))
         .ForMember(dest => dest.UserPhone, options => options.MapFrom(src => src.Phone))
         .ForMember(dest => dest.UserStudentOrTeacher, options => options.MapFrom(src => src.StudentOrTeacher))
-        .ForMember(dest => dest.UserAddress, options => options.MapFrom(src => src.Address));
+        .ForMember(dest => dest.UserAddress, options => options.MapFrom(src => src.Address))
+        .ForMember(dest => dest.UserCourses, options => options.MapFrom(src => src.Course));
 
       CreateMap<PostAddressViewModel, Address>();
       CreateMap<Address, AddressViewModel>()

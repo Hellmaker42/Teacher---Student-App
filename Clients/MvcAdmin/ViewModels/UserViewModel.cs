@@ -9,6 +9,6 @@ namespace MvcAdmin.ViewModels
     public string? UserPhone { get; set; }
     public bool UserStudentOrTeacher { get; set; } 
     public AddressViewModel? UserAddress { get; set; }
-  
+    public List<CourseViewModel>? UserCourses { get; set; }
   }
 }

@@ -8,7 +8,7 @@ namespace Tenta_API.Interfaces
   public interface ICourseRepository
     {
         public Task<List<CourseViewModel>> GetAllCoursesAsync();
-        public Task<CourseViewModel?> GetCourseAsync(int id);
+        public Task<CourseViewModel?> GetCourseByIdAsync(int id);
         public Task<CourseViewModel?> GetCourseAsync(string title);
         public Task<CourseViewModel?> GetCourseByNumberAsync(int number);
         public Task<CourseWithCategoryViewModel> GetCourseWithCategoryAsync(int id);

@@ -15,11 +15,15 @@
     <nav>
       <ul>
         <li>
-          <a asp-controller="Course" asp-action="index">Våra Kurser</a> <a asp-controller="Student" asp-action="CreateStudent">Registrera dig</a>
           @{
             if(MvcUser.Class.Session.Email is not null)
             {
+              <a asp-controller="Course" asp-action="CategoriesWithCourse">Våra Kurser</a> <a asp-controller="Student" asp-action="ShowCourses">Visa vilka kurser du valt</a>
               <p>Inloggad som @MvcUser.Class.Session.Email</p>
+            }
+            else
+            {
+              <a asp-controller="Course" asp-action="CategoriesWithCourse">Våra Kurser</a> <a asp-controller="Student" asp-action="CreateStudent">Registrera dig</a>
             }
           }
         </li>

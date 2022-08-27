@@ -1,0 +1,28 @@
+@model MvcUser.ViewModels.UserViewModel
+@{
+  ViewData["Title"] = "Registrerade Kuser";
+  int x = 0;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<article>
+  <section>
+    @foreach (var course in Model.UserCourses)
+    {
+      <div>
+        <p>@course.CourseTitle</p>
+      </div>
+
+        x++;
+    }
+    @{
+      if (x == 0)
+      {
+        <div>
+          <p>Du har inga kurser registrerade.</p>
+        </div>
+      }
+    }
+  </section>
+</article>

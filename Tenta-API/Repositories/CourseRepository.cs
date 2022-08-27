@@ -7,6 +7,7 @@ using Tenta_API.Model;
 using Tenta_API.ViewModel;
 using Tenta_API.ViewModel.Category;
 using Tenta_API.ViewModel.Course;
+using Tenta_API.ViewModel.Length;
 
 namespace Tenta_API.Repositories
 {
@@ -23,19 +24,15 @@ namespace Tenta_API.Repositories
     public async Task AddCourseAsync(PostCourseViewModel model)
     {
       var courseToAdd = _mapper.Map<Course>(model);
-      // Category category = new Category{
-      //   Name = courseToAdd.Category!.Name
-      // };
-      // Length length = new Length{
-      //   Days = courseToAdd.Length!.Days,
-      //   Hours = courseToAdd.Length.Hours,
-      //   Minutes = courseToAdd.Length.Minutes
-      // };
+
       Category category = _mapper.Map<Category>(courseToAdd.Category!);
       Length length = _mapper.Map<Length>(courseToAdd.Length!);
 
       await _context.Courses.AddAsync(courseToAdd);
-      await _context.Categories.AddAsync(category);
+      if (model.Category is not null)
+      {
+        await _context.Categories.AddAsync(category);
+      }
       await _context.Lengths.AddAsync(length);
     }
 
@@ -45,11 +42,30 @@ namespace Tenta_API.Repositories
       return await _context.Courses.ProjectTo<CourseViewModel>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
-    public async Task<CourseViewModel?> GetCourseAsync(int id)
+    public async Task<CourseViewModel?> GetCourseByIdAsync(int id)
     {
-      return await _context.Courses.Where(c => c.Id == id)
+      var course = await _context.Courses.Where(c => c.Id == id)
         .ProjectTo<CourseViewModel>(_mapper.ConfigurationProvider)
         .SingleOrDefaultAsync();
+
+      var length = await _context.Lengths.Where(l => l.Id == id)
+        .SingleOrDefaultAsync();
+
+      var lengthModel = new LengthViewModel
+      {
+        LengthCourseId = id,
+        LengthDays = length!.Days,
+        LengthHours = length!.Hours,
+        LengthMinutes = length!.Minutes
+      };
+
+      course!.CourseLength = lengthModel;
+
+      Console.WriteLine(course!.CourseLength!.LengthDays);
+      Console.WriteLine(course.CourseLength!.LengthHours);
+      Console.WriteLine(course.CourseLength!.LengthMinutes);
+
+      return course;
     }
 
     public async Task<CourseViewModel?> GetCourseAsync(string title)
@@ -75,7 +91,7 @@ namespace Tenta_API.Repositories
         throw new Exception($"Vi kunde inte hitta någon kurs med id: {id}");
       }
 
-      var length = await _context.Lengths.FindAsync(course.LengthId);
+      var length = await _context.Lengths.FindAsync(course.Length!.Id);
       var category = await _context.Categories.FindAsync(course.CategoryId);
       var courseCat = new CourseWithCategoryViewModel
       {
@@ -103,7 +119,7 @@ namespace Tenta_API.Repositories
         throw new Exception($"Vi kunde inte hitta någon kurs med id: {id}");
       }
 
-      var length = await _context.Lengths.FindAsync(course.LengthId);
+      var length = await _context.Lengths.FindAsync(course.Length!.Id);
       var category = await _context.Categories.FindAsync(course.CategoryId);
       var courseInfo = new CourseWithInfoViewModel
       {
@@ -138,14 +154,15 @@ namespace Tenta_API.Repositories
       //   }).ToListAsync();
 
       return await _context.Courses.Where(c => c.CategoryId == id)
-        .Select(cm => new CourseWithInfoViewModel{
+        .Select(cm => new CourseWithInfoViewModel
+        {
           CourseId = cm.Id,
           CourseNumber = cm.Number,
           CourseTitle = cm.Title,
           CourseDescription = cm.Description,
           CourseDetails = cm.Description,
           CourseIsVideo = cm.IsVideo,
-          CourseLengthId = cm.LengthId,
+          CourseLengthId = cm.Length!.Id,
           CourseCategoryId = cm.CategoryId,
           CategoryName = cm.Category!.Name,
           CourseVideoDescription = (cm.IsVideo) ? $"Detta är en videokurs som är {cm.Length!.Hours} timmar och {cm.Length.Minutes} minuter lång." : $"Detta är en vanlig kurs som är {cm.Length!.Days} dagar lång."
@@ -163,16 +180,36 @@ namespace Tenta_API.Repositories
 
     public async Task UpdateCourseAsync(int id, PostCourseViewModel model)
     {
-      var course = await _context.Courses.FindAsync(id);
-      _mapper.Map<PostCourseViewModel, Course>(model, course!);
+      var oldCourse = await _context.Courses.FindAsync(id);
 
-      if (course is null)
+      if (oldCourse is not null)
       {
-        throw new Exception($"Vi kunde inte hitta någon bil med id: {id}");
-      }
+        oldCourse.Number = model.Number;
+        oldCourse.Title = model.Title;
+        oldCourse.Description = model.Description;
+        oldCourse.Details = model.Details;
+        oldCourse.Details = model.Details;
+        oldCourse.IsVideo = model.IsVideo;
+        oldCourse.CategoryId = model.CategoryId;
+        _context.Update(oldCourse);
 
-      _context.Update(course);
+        var oldLength = await _context.Lengths.FindAsync(id);
+
+        if (oldLength is not null)
+        {
+          oldLength.CourseId = id;
+          oldLength.Days = model.Length!.Days;
+          oldLength.Hours = model.Length!.Hours;
+          oldLength.Minutes = model.Length!.Minutes;
+          _context.Update(oldLength);
+        }
+      }
+      else
+      {
+        throw new Exception($"Vi kunde inte hitta någon kurs med id: {id}");
+      }
     }
+
     public void DeleteCourse(int id)
     {
       var response = _context.Courses.Find(id);

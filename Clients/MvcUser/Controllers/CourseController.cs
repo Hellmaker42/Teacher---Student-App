@@ -14,14 +14,12 @@ namespace MvcUser.Controllers
       _courseService = new CourseServiceModel(_config);
     }
 
-    [HttpGet("Category")]
-    public async Task<IActionResult> Index()
+    [HttpGet("CategoriesWithCourse")]
+    public async Task<IActionResult> GetAllCategoriesWithCourse()
     {
       try
       {
-        // var courseService = new CourseServiceModel(_config);
-
-        var categories = await _courseService.GetAllCategories();
+        var categories = await _courseService.GetAllCategoriesWithCourse();
         return View("Index", categories);
       }
       catch (System.Exception)

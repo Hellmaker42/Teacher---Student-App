@@ -10,6 +10,7 @@ namespace MvcUser.ViewModels
     public string? CourseDetails { get; set; }
     public bool CourseIsVideo { get; set; }
     public int CourseCategoryId { get; set; }
-    public int CourseLengthId { get; set; }
+    public CategoryViewModel? CourseCategory { get; set; } = new CategoryViewModel();
+    public LengthViewModel? CourseLength { get; set; } = new LengthViewModel();
   }
 }

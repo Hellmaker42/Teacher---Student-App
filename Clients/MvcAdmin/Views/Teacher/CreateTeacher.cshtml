@@ -1,4 +1,4 @@
-@model MvcUser.ViewModels.CreateUserViewModel
+@model MvcAdmin.ViewModels.CreateUserViewModel
 
 <h1 class="page-title">Registrera en ny lärare</h1>
 <section class="form-container">
@@ -14,6 +14,12 @@
     <div class="form-control">
       <label asp-for="@Model!.Email">Epost-adress</label>
       <input asp-for="@Model!.Email" />
+      @{
+        if(ViewBag.EmailError is not null)
+        {
+          <p style="color: red;">@ViewBag.EmailError</p>
+        }
+      }
     </div>
     <div class="form-control">
       <label asp-for="@Model!.Phone">Telefonnummer</label>

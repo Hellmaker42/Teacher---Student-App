@@ -16,6 +16,21 @@ namespace Tenta_API.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
 
+            modelBuilder.Entity("CourseUser", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CourseId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CourseUser");
+                });
+
             modelBuilder.Entity("Tenta_API.Model.Address", b =>
                 {
                     b.Property<int>("Id")
@@ -77,9 +92,6 @@ namespace Tenta_API.Data.Migrations
                     b.Property<bool>("IsVideo")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LengthId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Number")
                         .HasColumnType("INTEGER");
 
@@ -90,8 +102,6 @@ namespace Tenta_API.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("LengthId");
-
                     b.ToTable("Courses");
                 });
 
@@ -99,6 +109,9 @@ namespace Tenta_API.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CourseId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Days")
@@ -112,21 +125,10 @@ namespace Tenta_API.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CourseId")
+                        .IsUnique();
+
                     b.ToTable("Lengths");
-                });
-
-            modelBuilder.Entity("Tenta_API.Model.Qualification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Qualifications");
                 });
 
             modelBuilder.Entity("Tenta_API.Model.User", b =>
@@ -155,6 +157,21 @@ namespace Tenta_API.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("CourseUser", b =>
+                {
+                    b.HasOne("Tenta_API.Model.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tenta_API.Model.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Tenta_API.Model.Address", b =>
                 {
                     b.HasOne("Tenta_API.Model.User", "User")
@@ -174,15 +191,18 @@ namespace Tenta_API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Tenta_API.Model.Length", "Length")
-                        .WithMany("Courses")
-                        .HasForeignKey("LengthId")
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Tenta_API.Model.Length", b =>
+                {
+                    b.HasOne("Tenta_API.Model.Course", "Course")
+                        .WithOne("Length")
+                        .HasForeignKey("Tenta_API.Model.Length", "CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-
-                    b.Navigation("Length");
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("Tenta_API.Model.Category", b =>
@@ -190,9 +210,9 @@ namespace Tenta_API.Data.Migrations
                     b.Navigation("Courses");
                 });
 
-            modelBuilder.Entity("Tenta_API.Model.Length", b =>
+            modelBuilder.Entity("Tenta_API.Model.Course", b =>
                 {
-                    b.Navigation("Courses");
+                    b.Navigation("Length");
                 });
 
             modelBuilder.Entity("Tenta_API.Model.User", b =>

@@ -12,7 +12,6 @@ namespace Tenta_API.ViewModel.Course
     public bool IsVideo { get; set; }
     public int CategoryId { get; set; }
     public PostCategoryViewModel? Category { get; set; }
-    public int LengthId { get; set; }
     public PostLengthViewModel? Length { get; set; }
   }
 }

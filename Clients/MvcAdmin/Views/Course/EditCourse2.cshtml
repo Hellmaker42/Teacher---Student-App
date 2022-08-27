@@ -1,0 +1,53 @@
+@model MvcAdmin.ViewModels.CourseViewModel
+
+<h1 class="page-title">Registrera en ny kuk</h1>
+<section class="form-container">
+  <form class="form" asp-action="UpdateCourse" asp-route-id="@Model.CourseId" method="post">
+    <div class="form-control">
+      <label asp-for="@Model!.CourseNumber">Kursnummer</label>
+      <input asp-for="@Model!.CourseNumber" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.CourseTitle">Titel</label>
+      <input asp-for="@Model!.CourseTitle" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.CourseDescription">Beskrivning</label>
+      <input asp-for="@Model!.CourseDescription" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.CourseDetails">Detaljer</label>
+      <input asp-for="@Model!.CourseDetails" />
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model.CourseIsVideo">Är detta en videokurs</label>
+      <input class="isVideo" type="radio" name="true" value=true asp-for="@Model.CourseIsVideo" />
+      <label for="yes">Ja</label>
+      <input class="isVideo" type="radio" name="true" value=false asp-for="CourseIsVideo" />
+      <label for="no">Nej</label>
+    </div>
+    <div class="form-control">
+      <label asp-for="@Model!.CourseCategory">Kategori</label><br>
+      <label asp-for="@Model!.CourseCategory!.CategoryName">Skapa ny kategori om den inte finns i listan nedan</label>
+      <input type="text" id="cat_field" value="" />
+      <a href='' onclick="this.href='CreateCategory?catName='+document.getElementById('cat_field').value">Lägg till kategori</a><br>
+      <label asp-for="@Model!.CourseCategory!.CategoryName">Vilken kategori tillhör kursen</label>
+      <select class="form-control" asp-items="@ViewBag.Categories" asp-for="@Model!.CourseCategory!.CategoryName"></select>
+    </div>
+    <div class="form-control">
+      <label>Kursens längd</label><br>
+    </div>
+    <div class="divNotVideo">
+      <label class="days" asp-for="@Model!.CourseLength!.LengthDays">Antal dagar</label><br>
+      <input class="days" asp-for="@Model!.CourseLength!.LengthDays" /><br>
+    </div>
+    <div class="divIsVideo">
+      <label class="hours" asp-for="@Model!.CourseLength!.LengthHours">Antal Timmar</label><br>
+      <input class="hours" asp-for="@Model!.CourseLength!.LengthHours" /><br>
+      <label class="minutes" asp-for="@Model!.CourseLength!.LengthMinutes">Antal minuter</label><br>
+      <input class="minutes" asp-for="@Model!.CourseLength!.LengthMinutes" /><br>
+    </div>
+    <button type="submit" class="btn">Spara</button>
+  </form>
+</section>
+<script src="~/js/editcourse.js"></script>

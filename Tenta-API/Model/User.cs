@@ -9,12 +9,7 @@ namespace Tenta_API.Model
     public string? Phone { get; set; }
     public bool StudentOrTeacher { get; set; }
     public Address? Address { get; set; }
-
-
-
-
-    
-    // public ICollection<CourseStudent>? CourseStudents { get; set; }
+    public ICollection<Course>? Course { get; set; } = new List<Course>();
     // public ICollection<Qualification> Qualifications { get; set; } = new List<Qualification>();
   }
 }

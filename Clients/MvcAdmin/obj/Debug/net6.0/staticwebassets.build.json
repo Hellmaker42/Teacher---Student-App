@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "yLZHeGTKyyy9DrG/gcLBcuSZ28FxcNLBpoU3fN8jI24=",
+  "Hash": "LM1ir6qhKVSlyVnuwxsI454FupM5c0ENCXiD4dlcbnM=",
   "Source": "MvcAdmin",
   "BasePath": "_content/MvcAdmin",
   "Mode": "Default",
@@ -83,6 +83,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "E:\\Code-net\\Tenta\\Clients\\MvcAdmin\\wwwroot\\js\\editcourse.js",
+      "SourceId": "MvcAdmin",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\Code-net\\Tenta\\Clients\\MvcAdmin\\wwwroot\\",
+      "BasePath": "_content/MvcAdmin",
+      "RelativePath": "js/editcourse.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\editcourse.js"
     },
     {
       "Identity": "E:\\Code-net\\Tenta\\Clients\\MvcAdmin\\wwwroot\\js\\site.js",

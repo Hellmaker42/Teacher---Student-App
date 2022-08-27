@@ -1,4 +1,5 @@
 using Tenta_API.ViewModel.Address;
+using Tenta_API.ViewModel.Course;
 
 namespace Tenta_API.ViewModel.User
 {
@@ -11,8 +12,6 @@ namespace Tenta_API.ViewModel.User
       public string? UserPhone { get; set; }
       public bool UserStudentOrTeacher { get; set; }
       public AddressViewModel? UserAddress { get; set; }
-
-      // public AddressViewModel UserAddress { get; set; } = new AddressViewModel();
-      // public ICollection<CourseViewModel> StudentCourses { get; set; } = new List<CourseViewModel>();
+      public ICollection<CourseViewModel> UserCourses { get; set; } = new List<CourseViewModel>();
     }
 }

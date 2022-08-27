@@ -38,6 +38,27 @@
       <label asp-for="@Model!.UserAddress!.AddressCity">Ort</label>
       <input asp-for="@Model!.UserAddress!.AddressCity">
     </div>
+    <div class="form-control smallerText">
+      <table>
+        <tr>
+          <td>Kvalifikationer:</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            @foreach (var course in @Model.UserCourses!)
+            {
+              <p>@course.CourseTitle</p>
+            }            
+          </td>
+        </tr>
+        <tr>
+          <td><a href="">Redigera Kvalifikationer</a></td>
+        </tr>
+      </table>
+      
+
+    </div>
     <button type="submit" class="btn">Spara</button> <a asp-controller="Teacher" asp-action="GetAllTeachers">Tillbaka till listan</a>
   </form>
 </section>

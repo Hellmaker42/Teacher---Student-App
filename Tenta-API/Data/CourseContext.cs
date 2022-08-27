@@ -10,18 +10,18 @@ namespace Tenta_API.Data
     public DbSet<Length> Lengths => Set<Length>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Address> Addresses => Set<Address>();
-    public DbSet<Qualification> Qualifications => Set<Qualification>();
-    // public DbSet<CourseStudent> CourseStudent => Set<CourseStudent>();
+    // public DbSet<Qualification> Qualifications => Set<Qualification>();
+    // public DbSet<CourseUser> CourseStudent => Set<CourseUser>();
     public CourseContext(DbContextOptions options) : base(options)
     {
     }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    // protected override void OnModelCreating(ModelBuilder modelBuilder)
+    // {
       // modelBuilder.Entity<CourseStudent>().HasKey(sc => new { sc.UserId, sc.CourseId });
-      modelBuilder.Entity<Course>().HasOne(c => c.Category).WithMany(c => c.Courses);
-      modelBuilder.Entity<Length>().HasMany(c => c.Courses).WithOne(l => l.Length);
-      modelBuilder.Entity<User>().HasOne(a => a.Address).WithOne(u => u.User).HasForeignKey<Address>(a => a.UserId);
+      // modelBuilder.Entity<Course>().HasOne(c => c.Category).WithMany(c => c.Courses);
+      // modelBuilder.Entity<Course>().HasOne(l => l.Length).WithOne(c => c.Course).HasForeignKey<Length>(l => l.CourseId);
+      // modelBuilder.Entity<User>().HasOne(a => a.Address).WithOne(u => u.User).HasForeignKey<Address>(a => a.UserId);
 
-    }
+    // }
   }
 }

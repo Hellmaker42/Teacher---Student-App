@@ -9,6 +9,7 @@
 
 body {
   font-family: 'poppins', sans-serif;
+  background-color: rgb(255, 255, 255);
 }
 
 main {
@@ -17,4 +18,21 @@ main {
 
 h2 {
   padding: 0 0 1.1rem 0;
+}
+
+th, td {
+  padding: 2px 10px 2px 5px;
+  text-align: left;
+}
+
+.table1 {
+  position: absolute;
+  left: 300px;
+  top: 300px;
+}
+
+.smallerText {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 0.95em;
+  margin: 1px 3px 7px 10px;
 }

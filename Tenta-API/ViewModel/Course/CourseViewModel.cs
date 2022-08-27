@@ -1,3 +1,6 @@
+using Tenta_API.ViewModel.Category;
+using Tenta_API.ViewModel.Length;
+
 namespace Tenta_API.ViewModel.Course
 {
   public class CourseViewModel
@@ -9,6 +12,7 @@ namespace Tenta_API.ViewModel.Course
     public string? CourseDetails { get; set; }
     public bool CourseIsVideo { get; set; }
     public int CourseCategoryId { get; set; }
-    public int CourseLengthId { get; set; }
+    public CategoryViewModel? CourseCategory { get; set; }
+    public LengthViewModel? CourseLength { get; set; } 
   }
 }

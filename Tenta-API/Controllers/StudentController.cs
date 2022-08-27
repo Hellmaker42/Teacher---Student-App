@@ -30,6 +30,14 @@ namespace Tenta_API.Controllers
     {
       var response = await _studentRepo.GetStudentByIdAsync(id);
       return Ok(response);
+
+    }
+
+    [HttpGet("GetStudentByEmail/{email}")]
+    public async Task<ActionResult<UserViewModel>> GetStudentByEmail(string email)
+    {
+      var response = await _studentRepo.GetStudentByEmailAsync(email);
+      return Ok(response);
     }
 
     [HttpPost()]
@@ -45,18 +53,18 @@ namespace Tenta_API.Controllers
       return StatusCode(500, "Det gick inte att spara eleven.");
     }
 
-    // [HttpPost("addcoursetostudent")]
-    // public async Task<ActionResult> AddCourseToStudentAsync(AddCourseToStudentViewModel studentCourse)
-    // {
-    //   await _studentRepo.AddCourseToStudentAsync(studentCourse);
+    [HttpPut("AddCourseToStudent")]
+    public async Task<ActionResult> AddCourseToStudentAsync(AddCourseToStudentViewModel studentCourse)
+    {
+      await _studentRepo.AddCourseToStudentAsync(studentCourse);
 
-    //   if (await _studentRepo.SaveAllAsync())
-    //   {
-    //     return StatusCode(201);
-    //   }
+      if (await _studentRepo.SaveAllAsync())
+      {
+        return StatusCode(201);
+      }
 
-    //   return StatusCode(500, "Det gick inte att spara eleven.");
-    // }
+      return StatusCode(500, "Det gick inte att spara eleven.");
+    }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTeacher(int id)

@@ -26,14 +26,43 @@ namespace Tenta_API.Repositories
       await _context.Categories.AddAsync(categoryToAdd);
     }
 
+    public async Task<List<CategoryViewModel>> GetAllCategoriesWithCourseAsync()
+    {
+
+      var categories = await _context.Categories.ProjectTo<CategoryViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+      var courses = await _context.Courses.ProjectTo<CourseViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+      var catToSend = new List<CategoryViewModel>();
+      foreach (var category in categories)
+      {
+        foreach (var course in courses)
+        {
+          if (category.CategoryId == course.CourseCategoryId)
+          {
+            catToSend.Add(category);
+            break;
+          }
+        }
+      }
+      return catToSend;
+    }
+
     public async Task<List<CategoryViewModel>> GetAllCategoriesAsync()
     {
+
       return await _context.Categories.ProjectTo<CategoryViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+
     }
 
     public async Task<CategoryViewModel> GetCategoryByIdAsync(int id)
     {
       return _mapper.Map<CategoryViewModel>(await _context.Categories.FindAsync(id));
+    }
+
+    public async Task<CategoryViewModel?> GetCategoryByNameAsync(string name)
+    {
+      return await _context.Categories.Where(c => c.Name!.ToLower() == name.ToLower())
+        .ProjectTo<CategoryViewModel>(_mapper.ConfigurationProvider)
+        .SingleOrDefaultAsync();
     }
 
     public async Task<List<CategoryWithCoursesViewModel>> GetCategoryWithCoursesAsync()
@@ -43,7 +72,7 @@ namespace Tenta_API.Repositories
         {
           CategoryId = ccvm.Id,
           CategoryName = ccvm.Name,
-          Courses = ccvm.Courses
+          Courses = ccvm.Courses!
             .Select(com => new CourseWithInfoViewModel
             {
               CourseId = com.Id,
@@ -52,14 +81,14 @@ namespace Tenta_API.Repositories
               CourseDescription = com.Description,
               CourseDetails = com.Details,
               CourseCategoryId = com.CategoryId,
-              CourseLengthId = com.LengthId,
+              CourseLengthId = com.Length!.Id,
               CourseIsVideo = com.IsVideo,
               CourseVideoDescription = (com.IsVideo) ? $"Detta är en videokurs som är {com.Length!.Hours} timmar och {com.Length.Minutes} minuter lång." : $"Detta är en vanlig kurs som är {com.Length!.Days} dagar lång."
             }).ToList()
         }).ToListAsync();
 
 
-        return courses;
+      return courses;
     }
 
     public async Task UpdateCategoryAsync(PostCategoryViewModel model, int id)
@@ -79,7 +108,7 @@ namespace Tenta_API.Repositories
     {
       var response = _context.Categories.Find(id);
 
-      if(response is not null)
+      if (response is not null)
       {
         _context.Categories.Remove(response);
       }

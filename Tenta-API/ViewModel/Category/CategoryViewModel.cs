@@ -4,5 +4,6 @@ namespace Tenta_API.ViewModel.Category
   {
     public int CategoryId { get; set; }
     public string? CategoryName { get; set; }
+    
   }
 }
