@@ -1,0 +1,94 @@
+@using MvcAdmin.Class
+@model IEnumerable<MvcAdmin.ViewModels.CourseViewModel>
+
+@{
+  ViewBag.PageTitle = "Redigera kvalifikationer för lärare";
+
+}
+
+<h1 class="page-title">@ViewBag.PageTitle</h1>
+<article>
+  <section>
+    <div class="table1">
+      <table>
+        <tr>
+          <td colspan="2"><b>Tillgängliga kvalifikationer</b></td>
+        </tr>
+        @foreach (var course in Model)
+        {
+          <tr>
+            <td width="150">@course.CourseTitle</td>
+            <td width="150"><a asp-controller="Teacher" asp-action="AddQualToTeacherFromEdit" asp-route-id="@course.CourseId">Lägg till</a></td>
+          </tr>
+        }
+      </table>
+    </div><br>
+    <div class="table2">
+      <table>
+        <tr>
+          <td colspan="2"><b>@UserSession.User!.UserFirstName @UserSession.User.UserLastName's kvalifikationer</b></td>
+        </tr>
+        @foreach (var course in UserSession.User!.UserCourses!)
+        {
+          <tr>
+            <td width="150">@course.CourseTitle</td>
+            <td width="150"><a asp-controller="Teacher" asp-action="RemoveQualFromTeacherFromEdit" asp-route-id="@course.CourseId">Ta bort</a></td>
+          </tr>
+        }        
+      </table>
+    </div>
+    <div><br><p><a asp-controller="Teacher" asp-action="SaveQualToTeacherFromEdit">Spara</a></p></div>
+  </section>
+</article>
+
+
+@* @{
+  ViewBag.PageTitle = "Redigera kvalifikationer för lärare";
+
+}
+
+<h1 class="page-title">@ViewBag.PageTitle</h1>
+<article>
+  <section>
+    <div class="table1">
+      <table>
+        <tr>
+          <td colspan="2"><b>Tillgängliga kvalifikationer</b></td>
+        </tr>
+        @foreach (var course in Model)
+        {
+          bool userHasCourse = false;
+          @foreach (var userCourse in UserSession.User!.UserCourses!)
+          {
+            if(userCourse.CourseId == course.CourseId)
+            {
+              userHasCourse = true;
+            }
+          }
+          @if(!userHasCourse)
+          {
+            <tr>
+              <td width="150">@course.CourseTitle</td>
+              <td width="150"><a asp-controller="Teacher" asp-action="AddQualToTeacher" asp-route-id="@course.CourseId">Lägg till</a></td>
+            </tr>
+          }
+        }
+      </table>
+    </div><br>
+    <div class="table2">
+      <table>
+        <tr>
+          <td colspan="2"><b>@UserSession.User!.UserFirstName @UserSession.User.UserLastName's kvalifikationer</b></td>
+        </tr>
+        @foreach (var course in UserSession.User.UserCourses!)
+        {
+          <tr>
+            <td width="150">@course.CourseTitle</td>
+            <td width="150"><a asp-controller="Teacher" asp-action="RemoveQualFromTeacher" asp-route-id="@course.CourseId">Ta bort</a></td>
+          </tr>
+        }        
+      </table>
+    </div>
+    <div><br><p><a asp-controller="Teacher" asp-action="SaveQualToTeacher">Spara</a></p></div>
+  </section>
+</article> *@

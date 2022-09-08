@@ -129,14 +129,14 @@ namespace Tenta_API.Repositories
 
     public async Task UpdateQualToTeacherAsync(AddQualToTeacherViewModel qualModel)
     {
-      User user = await _context.Users.FirstAsync(u => u.Email!.ToLower() == qualModel.TeacherEmail!.ToLower());
-      
+      User user = await _context.Users.FirstAsync(u => u.Email!.ToLower() == qualModel.TeacherEmail!.ToLower());  
       Course course = new();
+
 
       for (int i = 0; i < qualModel.CourseIds!.Count; i++)
       {
         course = await _context.Courses.FirstAsync(c => c.Id == qualModel.CourseIds[i]);
-        
+          
         user.Course!.Add(course);
         course.User!.Add(user);
       }
@@ -144,6 +144,78 @@ namespace Tenta_API.Repositories
       _context.Users.Update(user);
       _context.Courses.Update(course);
     }
+
+
+    // public async Task UpdateQualToTeacherFromEditAsync(AddQualToTeacherViewModel qualModel)
+    // {
+    //   UserViewModel userModel = await _context.Users
+    //     .Where(u => u.Email!.ToLower() == qualModel.TeacherEmail!.ToLower())
+    //     .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).FirstAsync();
+
+    //   User user = await _context.Users.FirstAsync(u => u.Email == qualModel.TeacherEmail);
+
+    //   foreach (var course in userModel.UserCourses)
+    //   {
+    //     await _context.Courses.Remove(course);
+    //     await _context.SaveChangesAsync();
+    //   }
+    // }
+
+    public async Task UpdateQualToTeacherFromEditAsync(AddQualToTeacherViewModel qualModel)
+    {
+      UserViewModel userModel = await _context.Users
+        .Where(u => u.Email!.ToLower() == qualModel.TeacherEmail!.ToLower())
+        .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).FirstAsync();
+
+      var user = await _context.Users.FirstAsync(u => u.Email == qualModel.TeacherEmail);
+      Course newCourse = new();
+
+      foreach (var course in userModel.UserCourses)
+      {
+        var courseWithUser = await _context.Courses.Include(c => c.User!.Where(u => u.Id == user.Id)).FirstOrDefaultAsync(c => c.Id == course.CourseId);
+        courseWithUser!.User!.Remove(user);
+        _context.ChangeTracker.DetectChanges();
+        await _context.SaveChangesAsync();      
+      }
+
+      if(qualModel.CourseIds!.Count > 0)
+      {
+        for (int i = 0; i < qualModel.CourseIds!.Count; i++)
+        {
+          newCourse = await _context.Courses.FirstAsync(c => c.Id == qualModel.CourseIds[i]);
+            
+          user.Course!.Add(newCourse);
+          newCourse.User!.Add(user);
+        }
+
+        _context.Users.Update(user);
+        _context.Courses.Update(newCourse);
+      }
+        _context.ChangeTracker.DetectChanges();
+    }
+
+
+
+    // public async Task AddSingleQualToTeacherAsync(AddSingleQualToTeacherViewModel singleQualModel)
+    // {
+    //   User user = await _context.Users.FirstAsync(u => u.Email!.ToLower() == singleQualModel.TeacherEmail!.ToLower());
+      
+    //   Course course = await _context.Users.C
+
+
+
+
+    //   for (int i = 0; i < qualModel.CourseIds!.Count; i++)
+    //   {
+    //     course = await _context.Courses.FirstAsync(c => c.Id == qualModel.CourseIds[i]);
+        
+    //     user.Course!.Add(course);
+    //     course.User!.Add(user);
+    //   }
+
+    //   _context.Users.Update(user);
+    //   _context.Courses.Update(course);
+    // }
 
     public async Task DeleteTeacherAsync(int id)
     {

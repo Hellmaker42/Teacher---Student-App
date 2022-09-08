@@ -48,12 +48,13 @@
           <td>
             @foreach (var course in @Model.UserCourses!)
             {
-              <p>@course.CourseTitle</p>
+              
+              <p><b>-</b>@course.CourseTitle</p>
             }            
           </td>
         </tr>
         <tr>
-          <td><a href="">Redigera Kvalifikationer</a></td>
+          <td><a asp-controller="Teacher" asp-action="EditQualToTeacher" asp-route-id="@Model.UserId">Redigera Kvalifikationer</a></td>
         </tr>
       </table>
       

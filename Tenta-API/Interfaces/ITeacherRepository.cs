@@ -12,6 +12,7 @@ namespace Tenta_API.Interfaces
     public Task<int> GetLastCreatedTeacherAsync();
     public Task UpdateTeacherAsync(int id, PostUserViewModel teacherModel);
     public Task UpdateQualToTeacherAsync(AddQualToTeacherViewModel qualModel);
+    public Task UpdateQualToTeacherFromEditAsync(AddQualToTeacherViewModel qualModel);
     public Task DeleteTeacherAsync(int id);
     public Task<bool> SaveAllAsync();
   }

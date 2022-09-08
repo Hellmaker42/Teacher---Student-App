@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using MvcAdmin.ViewModels;
 
 namespace MvcAdmin.Models
@@ -15,16 +11,17 @@ namespace MvcAdmin.Models
     public StudentServiceModel(IConfiguration config)
     {
       _config = config;
-      _baseUrl = $"{_config.GetValue<string>("baseUrl")}student";
+      _baseUrl = $"{_config.GetValue<string>("baseUrl")}";
       _options = new JsonSerializerOptions
       {
         PropertyNameCaseInsensitive = true
       };
     }
+    
 
     public async Task<List<UserViewModel>> GetAllStudents()
     {
-      var url = $"{_baseUrl}";
+      var url = $"{_baseUrl}student";
 
       using var http = new HttpClient();
       var response = await http.GetAsync(url);
@@ -40,7 +37,7 @@ namespace MvcAdmin.Models
 
     public async Task<UserViewModel> GetStudentById(int id)
     {
-      var url = $"{_baseUrl}/{id}";
+      var url = $"{_baseUrl}student/{id}";
 
       using var http = new HttpClient();
       var response = await http.GetAsync(url);
@@ -57,7 +54,7 @@ namespace MvcAdmin.Models
     public async Task<bool> DeleteStudent(int id)
     {
       using var http = new HttpClient();
-      var url = $"{_baseUrl}/{id}";
+      var url = $"{_baseUrl}student/{id}";
 
       var response = await http.DeleteAsync(url);
 
@@ -74,7 +71,7 @@ namespace MvcAdmin.Models
     public async Task<bool> UpdateStudent(int id, UserViewModel studentModel)
     {
       using var http = new HttpClient();
-      var url = $"{_baseUrl}/update/{id}";
+      var url = $"{_baseUrl}student/update/{id}";
 
       var postStudentModel = new PostUserViewModel();
       postStudentModel.FirstName = studentModel.UserFirstName;

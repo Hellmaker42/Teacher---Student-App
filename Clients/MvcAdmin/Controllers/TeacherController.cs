@@ -30,18 +30,13 @@ namespace MvcAdmin.Controllers
     [HttpPost("TeacherQual")]
     public async Task<IActionResult> TeacherQual(CreateUserViewModel teacher)
     {
-      // Class.Session.Email = teacher.Email;
-      // Class.Session.FirstName = teacher.FirstName;
-      // Class.Session.LastName = teacher.LastName;
-
       var userModel = await _teacherService.GetTeacherByEmail(teacher.Email);
+      var coursesModel = await _teacherService.GetAllCourses();
 
       Class.UserSession.User = userModel;
+      Class.CoursesSession.Courses = coursesModel;
 
-      var courses = await _teacherService.GetAllCourses();
-      Class.CoursesSession.Courses = courses;
-
-      return View("TeacherQual", courses);
+      return View("TeacherQual", coursesModel);
     }
 
     [Route("AddQualToTeacher")]
@@ -68,6 +63,30 @@ namespace MvcAdmin.Controllers
       return View("TeacherQual", courses);
     }
 
+    [Route("AddQualToTeacherFromEdit")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> AddQualToTeacherFromEdit(int id)
+    {
+      var course = await _teacherService.GetCourseById(id);
+      Class.UserSession.AddCourseFromEdit(course);
+
+      Class.CoursesSession.RemoveCourse(id);
+      var courses = Class.CoursesSession.Courses;
+      return View("EditQualToTeacher", courses);
+    }
+
+    [Route("RemoveQualFromTeacherFromEdit")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> RemoveQualFromTeacherFromEdit(int id)
+    {
+      var course = await _teacherService.GetCourseById(id);
+      Class.CoursesSession.AddCourse(course);
+
+      Class.UserSession.RemoveCourseFromEdit(id);
+      var courses = Class.CoursesSession.Courses;
+      return View("EditQualToTeacher", courses);
+    }
+
     [HttpGet("SaveQualToTeacher")]
     public async Task<IActionResult> SaveQualToTeacher()
     {
@@ -85,7 +104,26 @@ namespace MvcAdmin.Controllers
       await _teacherService.UpdateQualToTeacher(qualModel);
       Class.UserSession.Courses!.Clear();
      
-      return View("Confirmation");
+      var teachers = await _teacherService.GetAllTeachers();
+      return View("ListAllTeachers", teachers);
+    }
+
+
+    [HttpGet("SaveQualToTeacherFromEdit")]
+    public async Task<IActionResult> SaveQualToTeacherFromEdit()
+    {
+      AddQualToTeacherViewModel qualModel = new();
+      qualModel.TeacherEmail = Class.UserSession.User!.UserEmail;
+      foreach (var course in Class.UserSession.User!.UserCourses!)
+      {
+        qualModel.CourseIds!.Add(course.CourseId);
+      }
+      await _teacherService.UpdateQualToTeacherFromEdit(qualModel);
+      Class.UserSession.User.UserCourses.Clear();
+      Class.UserSession.Courses!.Clear();
+     
+      var teachers = await _teacherService.GetAllTeachers();
+      return View("ListAllTeachers", teachers);
     }
 
     //TODO:
@@ -93,11 +131,47 @@ namespace MvcAdmin.Controllers
     public async Task<IActionResult> EditQualToTeacher(int id)
     {
       var userModel = await _teacherService.GetTeacherById(id);
-      var courses = await _teacherService.GetAllCourses();
-      Class.CoursesSession.Courses = courses;
+      var coursesModel = await _teacherService.GetAllCourses();
+      List<CourseViewModel> inputCoursesModel = new();
+      bool userCourseExists = false;
+      
+      foreach (var course in coursesModel)
+      {
+        foreach (var userCourse in userModel.UserCourses!)
+        {
+          if(course.CourseId == userCourse.CourseId)
+          {
+            userCourseExists = true;
+          }
+        }
+        if(!userCourseExists)
+        {
+          inputCoursesModel.Add(course);
+        }
+        userCourseExists = false;
+      }
 
-      return View("EditQualToTeacher", userModel);
+      Class.UserSession.User = userModel;
+      Class.CoursesSession.Courses = inputCoursesModel;
+
+      return View("EditQualToTeacher", inputCoursesModel);
     }
+
+    // [Route("AddSingleQualToTeacher")]
+    // [HttpPut("{id}")]
+    // public async Task<IActionResult> AddSingleQualToTeacher(int id)
+    // {
+    //   AddSingleQualToTeacherViewModel singleQualModel = new();
+    //   singleQualModel.CourseId = id;
+    //   singleQualModel.TeacherEmail = Class.UserSession.User!.UserEmail;
+
+    //   var course = await _teacherService.GetCourseById(id);
+    //   Class.UserSession.AddCourse(course);
+
+    //   // Class.CoursesSession.RemoveCourse(id);<
+    //   var coursesModel = await _teacherService.GetAllCourses();
+    //   return View("EditQualToTeacher", coursesModel);
+    // }
 
     [HttpPost("CreateTeacher")]
     public async Task<IActionResult> CreateTeacher(CreateUserViewModel teacher)

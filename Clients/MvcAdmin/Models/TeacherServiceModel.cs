@@ -158,6 +158,38 @@ namespace MvcAdmin.Models
       return true;
     }
 
+    public async Task<bool> UpdateQualToTeacherFromEdit(AddQualToTeacherViewModel qualModel)
+    {
+      using var http = new HttpClient();
+      var url = $"{_baseUrl}teacher/UpdateQualToTeacherFromEdit";      
+      var response = await http.PutAsJsonAsync(url, qualModel);
+  
+      if (!response.IsSuccessStatusCode)
+      {
+        string reason = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(reason);
+        return false;
+      }
+
+      return true;
+    }
+
+    public async Task<bool> AddSingleQualToTeacher(AddSingleQualToTeacherViewModel singleQualModel)
+    {
+      using var http = new HttpClient();
+      var url = $"{_baseUrl}teacher/AddSingleQualToTeacher";      
+      var response = await http.PutAsJsonAsync(url, singleQualModel);
+  
+      if (!response.IsSuccessStatusCode)
+      {
+        string reason = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(reason);
+        return false;
+      }
+
+      return true;
+    }
+
     public async Task<List<CourseViewModel>> GetAllCourses()
     {
       var url = $"{_baseUrl}courses";

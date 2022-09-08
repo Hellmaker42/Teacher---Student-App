@@ -112,5 +112,41 @@ namespace Tenta_API.Controllers
         return StatusCode(500, ex.Message);
       }
     }
+
+    [HttpPut("UpdateQualToTeacherFromEdit")]
+    public async Task<ActionResult> UpdateQualToTeacherFromEdit(AddQualToTeacherViewModel qualModel)
+    {
+      try
+      {
+        await _teachRepo.UpdateQualToTeacherFromEditAsync(qualModel);
+        if (await _teachRepo.SaveAllAsync())
+        {
+          return NoContent();
+        }
+        return StatusCode(500, "Ett fel inträffade när läraren skulle uppdateras");
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, ex.Message);
+      }
+    }
+
+    // [HttpPut("AddSingleQualToTeacher")]
+    // public async Task<ActionResult> AddSingleQualToTeacher(AddSingleQualToTeacherViewModel singleQualModel)
+    // {
+    //   try
+    //   {
+    //     await _teachRepo.AddSingleQualToTeacherAsync(singleQualModel);
+    //     if (await _teachRepo.SaveAllAsync())
+    //     {
+    //       return NoContent();
+    //     }
+    //     return StatusCode(500, "Ett fel inträffade när läraren skulle uppdateras");
+    //   }
+    //   catch (Exception ex)
+    //   {
+    //     return StatusCode(500, ex.Message);
+    //   }
+    // }
   }
 }

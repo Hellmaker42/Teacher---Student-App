@@ -4,17 +4,20 @@ using MvcUser.ViewModels;
 
 namespace MvcUser.Controllers
 {
-
   [Route("[controller]")]
   public class StudentController : Controller
   {
-
     private readonly IConfiguration _config;
     private readonly StudentServiceModel _studentService;
     public StudentController(IConfiguration config)
     {
       _config = config;
       _studentService = new StudentServiceModel(_config);
+    }
+
+    public IActionResult Index()
+    {
+      return View();
     }
 
     [HttpGet("GetAllStudents")]
@@ -43,6 +46,15 @@ namespace MvcUser.Controllers
     [HttpPost("CreateStudent")]
     public async Task<IActionResult> Create(CreateUserViewModel student)
     {
+      ViewBag.EmailError = null;
+      student.StudentOrTeacher = false;
+      if (await _studentService.CheckEmail(student.Email!))
+      {
+        ViewBag.EmailError = "Epostadressen du angivit finns redan i systemet.";
+        return View("CreateStudent", student);
+      }
+
+
       var studentModel = new CreateUserViewModel()
       {
         FirstName = student.FirstName,
@@ -65,6 +77,7 @@ namespace MvcUser.Controllers
       if (await _studentService.CreateStudent(studentModel))
       {
         Class.Session.Email = studentModel.Email;
+        Class.Session.SelectedCousesId = new();
 
         return View("Confirmation");
       }
@@ -78,6 +91,8 @@ namespace MvcUser.Controllers
     {
       try
       {
+        Class.Session.SelectedCousesId!.Add(id);
+
         AddCourseToStudentViewModel model = new AddCourseToStudentViewModel
         {
           CourseId = id,
@@ -89,6 +104,35 @@ namespace MvcUser.Controllers
           return View("AddedCourse");
         }
         return View("Error");
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine(ex.Message);
+        return View("Error");
+      }
+    }
+
+    [Route("RemoveCourseFromStudent")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> RemoveCourseFromStudent(int id)
+    {
+      try
+      {
+        Class.Session.SelectedCousesId!.Remove(id);
+
+        RemoveCourseFromStudentViewModel model = new RemoveCourseFromStudentViewModel
+        {
+          CourseId = id,
+          StudentEmail = Class.Session.Email
+        };
+
+        if(await _studentService.RemoveCourseFromStudent(model))
+        {
+        var student = await _studentService.GetStudentByEmail();
+        return View("ShowCourses", student);
+        }
+        return View("Error");
+        
       }
       catch (Exception ex)
       {

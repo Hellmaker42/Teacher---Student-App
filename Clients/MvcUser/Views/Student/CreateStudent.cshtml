@@ -14,6 +14,12 @@
     <div class="form-control">
       <label asp-for="@Model!.Email">Epost-adress</label>
       <input asp-for="@Model!.Email" />
+      @{
+        if(ViewBag.EmailError is not null)
+        {
+          <p style="color: red;">@ViewBag.EmailError</p>
+        }
+      }
     </div>
     <div class="form-control">
       <label asp-for="@Model!.Phone">Telefonnummer</label>

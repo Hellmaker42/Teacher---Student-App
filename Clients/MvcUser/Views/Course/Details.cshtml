@@ -1,3 +1,4 @@
+@using MvcUser.Class;
 @model MvcUser.ViewModels.CourseViewModel
 
 <h1>Här är information om @Model.CourseTitle-kursen</h1>
@@ -14,4 +15,11 @@ else
 {
   <p>Detta är en vanlig kurs som är @Model.CourseLength!.LengthDays dagar lång.</p>
 }
-<p><a asp-controller="Student" asp-action="AddCourseToStudent" asp-route-id="@Model.CourseId">Lägg till kurs</a></p>
+@if(Session.SelectedCousesId!.Contains(Model.CourseId))
+{
+  <p><b>Du har redan valt denna kursen!</b></p>
+}
+else
+{
+  <p><a asp-controller="Student" asp-action="AddCourseToStudent" asp-route-id="@Model.CourseId">Lägg till kurs</a></p>
+}

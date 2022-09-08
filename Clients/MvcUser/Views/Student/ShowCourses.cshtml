@@ -1,6 +1,6 @@
 @model MvcUser.ViewModels.UserViewModel
 @{
-  ViewData["Title"] = "Registrerade Kuser";
+  ViewData["Title"] = "Registrerade Kurser";
   int x = 0;
 }
 
@@ -8,21 +8,28 @@
 
 <article>
   <section>
-    @foreach (var course in Model.UserCourses)
-    {
-      <div>
-        <p>@course.CourseTitle</p>
-      </div>
+    <table>
+        @foreach (var course in Model.UserCourses)
+        {
+          <tr>
+            <td>
+              <p>@course.CourseTitle</p>
+            </td>
+            <td>
+              <p><a asp-controller="Student" asp-action="RemoveCourseFromStudent" asp-route-id="@course.CourseId">Ta bort kurs</a></p>
+            </td>
+          </tr>
 
-        x++;
-    }
-    @{
-      if (x == 0)
-      {
-        <div>
-          <p>Du har inga kurser registrerade.</p>
-        </div>
-      }
-    }
+          x++;
+        }
+        @{
+          if (x == 0)
+          {
+            <div>
+              <p>Du har inga kurser registrerade.</p>
+            </div>
+          }
+        }
+    </table>
   </section>
 </article>

@@ -36,8 +36,30 @@
     </div>
     <div class="form-control">
       <label asp-for="@Model!.UserAddress!.AddressCity">Ort</label>
-      <input asp-for="@Model!.UserAddress!.AddressCity">
+      <input asp-for="@Model!.UserAddress!.AddressCity">     
     </div>
+     <div class="form-control smallerText">
+      <table>
+        <tr>
+          <td>Valda Kurser:</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            @foreach (var course in @Model.UserCourses!)
+            {
+              
+              <p><b>-</b>@course.CourseTitle</p>
+            }            
+          </td>
+        </tr>
+        <tr>
+          <td><a asp-controller="Teacher" asp-action="EditQualToTeacher" asp-route-id="@Model.UserId">Redigera Kurser</a></td>
+        </tr>
+      </table>
+      
+
+    </div>   
     <button type="submit" class="btn">Spara</button> <a asp-controller="Student" asp-action="GetAllStudents">Tillbaka till listan</a>
   </form>
 </section>

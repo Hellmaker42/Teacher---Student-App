@@ -21,6 +21,7 @@
             <div class="smallerText">Läraren är kvalificerad för följande kurser :<br>
             @foreach (var item in teacher.UserCourses!)
             {
+              <b>-</b>
               @item.CourseTitle;<br>
             }
             </div>

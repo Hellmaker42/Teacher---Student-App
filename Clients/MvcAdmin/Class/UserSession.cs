@@ -11,10 +11,21 @@ namespace MvcAdmin.Class
     {
       Courses!.Add(model);
     }
+
+    public static void AddCourseFromEdit(CourseViewModel model)
+    {
+      User!.UserCourses!.Add(model);
+    }
     public static void RemoveCourse(int id)
     {
       var courseToRemove = Courses!.Single(c => c.CourseId == id);
       Courses!.Remove(courseToRemove);
+    }
+
+    public static void RemoveCourseFromEdit(int id)
+    {
+      var courseToRemove = User!.UserCourses!.Single(c => c.CourseId == id);
+      User!.UserCourses!.Remove(courseToRemove);
     }
   }
 }

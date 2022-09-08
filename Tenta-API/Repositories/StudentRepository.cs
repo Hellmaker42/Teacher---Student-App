@@ -54,6 +54,18 @@ namespace Tenta_API.Repositories
     {
       return await _context.Users.Where(u => u.Email!.ToLower() == email.ToLower()).ProjectTo<UserViewModel>(_mapper.ConfigurationProvider).FirstAsync();
     }
+    public async Task<bool> CheckEmailAsync(string email)
+    {
+      var user = await _context.Users.Where(u => u.Email!.ToLower() == email!.ToLower()).FirstOrDefaultAsync();
+      if(user is not null)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
 
     public async Task UpdateStudentAsync(int id, PostUserViewModel studentModel)
     {
@@ -96,6 +108,24 @@ namespace Tenta_API.Repositories
 
       _context.Users.Update(user);
       _context.Courses.Update(course);
+    }
+
+    public async Task RemoveCourseFromStudentAsync(RemoveCourseFromStudentViewModel model)
+    {
+      User user = await _context.Users.FirstAsync(x => x.Email!.ToLower() == model.StudentEmail!.ToLower());
+      Course course = await _context.Courses.FirstAsync(x => x.Id == model.CourseId); 
+
+        var courseWithUser = await _context.Courses.Include(c => c.User!.Where(u => u.Id == user.Id)).FirstOrDefaultAsync(c => c.Id == model.CourseId);
+        courseWithUser!.User!.Remove(user);
+
+        _context.ChangeTracker.DetectChanges();
+        // await _context.SaveChangesAsync();   
+
+      // user.Course!.Remove(course);
+      // course.User!.Remove(user);  
+
+      // _context.Users.Update(user);
+      // _context.Courses.Update(course); 
     }
 
     public async Task DeleteStudentAsync(int id)

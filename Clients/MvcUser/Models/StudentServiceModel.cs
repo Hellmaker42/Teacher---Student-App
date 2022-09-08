@@ -18,6 +18,19 @@ namespace MvcUser.Models
         PropertyNameCaseInsensitive = true
       };
     }
+    public async Task<bool> CheckEmail(string email)
+    {
+      var url = $"{_baseUrl}/CheckEmail/{email}";
+
+      using var http = new HttpClient();
+      var response = await http.GetAsync(url);
+
+      if (!response.IsSuccessStatusCode)
+      {
+        throw new Exception("Det här gick ju inte bra tyvärr..");
+      }
+      return await response.Content.ReadFromJsonAsync<bool>();
+    }
 
     public async Task<List<UserViewModel>> GetAllStudentsAsync()
     {
@@ -74,8 +87,6 @@ namespace MvcUser.Models
     {
       using var http = new HttpClient();
       var url = $"{_baseUrl}/AddCourseToStudent";
-
-
       var response = await http.PutAsJsonAsync(url, model);
 
       if (!response.IsSuccessStatusCode)
@@ -86,6 +97,22 @@ namespace MvcUser.Models
       }
 
       return true;
+    }
+
+    public async Task<bool> RemoveCourseFromStudent(RemoveCourseFromStudentViewModel model)
+    {
+      using var http = new HttpClient();
+      var url = $"{_baseUrl}/RemoveCourseFromStudent";
+      var response = await http.PutAsJsonAsync(url, model);
+
+      if (!response.IsSuccessStatusCode)
+      {
+        string reason = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(reason);
+        return false;
+      }
+
+      return true;    
     }
 
     // public async Task<UserViewModel> GetStudentCourses()
