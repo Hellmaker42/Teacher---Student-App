@@ -50,6 +50,40 @@ namespace MvcAdmin.Controllers
     {
       try
       {
+        if(!_courseService.CheckCourseNrOfDigits(courseModel.Number))
+        {
+          ViewBag.NumberError = "Kursnummer måste innehålla 4 siffror!";
+
+          var categories = await _courseService.GetAllCategories();
+          List<SelectListItem> catList = categories.ConvertAll(a =>
+          {
+            return new SelectListItem()
+            {
+              Text = a.CategoryName,
+              Value = a.CategoryId.ToString()
+            };
+          });
+          ViewBag.Categories = catList;
+          return View("CreateCourse", courseModel);
+        }
+
+        if(await _courseService.CheckIfCourseNumberExists(courseModel.Number))
+        {
+          ViewBag.NumberError = "Kursnummer existerar redan!";
+
+          var categories = await _courseService.GetAllCategories();
+          List<SelectListItem> catList = categories.ConvertAll(a =>
+          {
+            return new SelectListItem()
+            {
+              Text = a.CategoryName,
+              Value = a.CategoryId.ToString()
+            };
+          });
+          ViewBag.Categories = catList;
+          return View("CreateCourse", courseModel);
+        }
+
         if (!ModelState.IsValid)
         {
           return View("Error");
@@ -192,6 +226,7 @@ namespace MvcAdmin.Controllers
     public async Task<IActionResult> EditCourse(int id)
     {
       var course = await _courseService.GetCourseById(id);
+      Class.EditCourseSession.Course = course;
       var categories = await _courseService.GetAllCategories();
       List<SelectListItem> catList = categories.ConvertAll(a =>
       {
@@ -201,6 +236,7 @@ namespace MvcAdmin.Controllers
           Value = a.CategoryId.ToString()
         };
       });
+      
       ViewBag.Categories = catList;
       return View("EditCourse", course);
     }
@@ -211,6 +247,46 @@ namespace MvcAdmin.Controllers
     {
       try
       {
+        if(Class.EditCourseSession.Course!.CourseNumber != courseModel.CourseNumber)
+        {
+          if(!_courseService.CheckCourseNrOfDigits(courseModel.CourseNumber))
+          {
+            ViewBag.NumberError = "Kursnummer måste innehålla 4 siffror!";
+
+            var categories = await _courseService.GetAllCategories();
+            List<SelectListItem> catList = categories.ConvertAll(a =>
+            {
+              return new SelectListItem()
+              {
+                Text = a.CategoryName,
+                Value = a.CategoryId.ToString()
+              };
+            });
+            ViewBag.Categories = catList;
+            courseModel.CourseId = id;
+            return View("EditCourse", courseModel);
+          }
+
+          if(await _courseService.CheckIfCourseNumberExists(courseModel.CourseNumber))
+          {
+            ViewBag.NumberError = "Kursnummer existerar redan!!";
+
+            var categories = await _courseService.GetAllCategories();
+            List<SelectListItem> catList = categories.ConvertAll(a =>
+            {
+              return new SelectListItem()
+              {
+                Text = a.CategoryName,
+                Value = a.CategoryId.ToString()
+              };
+            });
+            ViewBag.Categories = catList;
+            courseModel.CourseId = id;
+            return View("EditCourse", courseModel);            
+          }
+        }
+
+
         if(await _courseService.UpdateCourse(id, courseModel))
         {
           return View("Confirmation");

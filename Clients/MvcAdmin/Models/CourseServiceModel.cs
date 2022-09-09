@@ -225,7 +225,6 @@ namespace MvcAdmin.Models
       return true;
     }
 
-
     public async Task<bool> DeleteCourse(int id)
     {
       using var http = new HttpClient();
@@ -244,25 +243,24 @@ namespace MvcAdmin.Models
       return true;
     }
 
-    // public async Task<SelectCategoryViewModel> GetSelectCategoryAsync()
-    // {
-    //   var categories = GetAllCategories();
+    public bool CheckCourseNrOfDigits(int courseNr)
+    {
+      if(Enumerable.Range(1000, 9999).Contains(courseNr)) return true;
+      return false;
+    }
 
-    //   var catList = (from product in categories
-    //                       select new SelectListItem()
-    //                       {
-    //                         Text = product.Name,
-    //                         Value = product.ProductId.ToString(),
-    //                       }).ToList();
+    public async Task<bool> CheckIfCourseNumberExists(int courseNr)
+    {
 
-    //   productsList.Insert(0, new SelectListItem()
-    //   {
-    //     Text = "----Select----",
-    //     Value = string.Empty
-    //   });
+      var url = $"{_baseUrl}courses/bynumber/{courseNr}";
+      using var http = new HttpClient();
+      var response = await http.GetAsync(url);
 
-    //   ProductViewModel productViewModel = new ProductViewModel();
-    //   productViewModel.Listofproducts = productsList;
-    // }
+      if (!response.IsSuccessStatusCode)
+      {
+        throw new Exception("Det här gick ju inte bra tyvärr..");
+      }
+      return await response.Content.ReadFromJsonAsync<bool>();
+    }
   }
 }

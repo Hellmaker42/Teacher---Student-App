@@ -71,6 +71,7 @@ namespace MvcAdmin.Controllers
     public async Task<IActionResult> EditStudent(int id)
     {
       var student = await _studentService.GetStudentById(id);
+      Class.UserSession.User = student;
       return View("EditStudent", student);
     }
 
@@ -78,9 +79,18 @@ namespace MvcAdmin.Controllers
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStudent(int id, UserViewModel studentModel)
     {
+      if(Class.UserSession.User!.UserEmail != studentModel.UserEmail)
+      {
+        if(await _studentService.CheckEmail(studentModel.UserEmail!))
+        {
+          ViewBag.EmailError = "Epostadressen du angivit finns redan i systemet.";
+          studentModel = await _studentService.GetStudentById(id);
+          return View("EditStudent", studentModel);        
+        }
+      }
       var student = await _studentService.UpdateStudent(id, studentModel);
-      // return Ok(student);
-      return View("Confirmation");
+      var students = await _studentService.GetAllStudents();
+      return View("ListAllStudents", students);
     }
   }
 }

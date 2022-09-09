@@ -2,8 +2,16 @@
 @model IEnumerable<MvcAdmin.ViewModels.CourseViewModel>
 
 @{
-  ViewBag.PageTitle = "Redigera kvalifikationer för lärare";
-
+  if(UserSession.User!.UserStudentOrTeacher)
+  {
+    ViewBag.PageTitle = "Redigera kvalifikationer för lärare";
+    ViewBag.CourseOrQual = "kvalifikationer";
+  }
+  else
+  {
+    ViewBag.PageTitle = "Redigera kurser för student";   
+    ViewBag.CourseOrQual = "kurser"; 
+  }
 }
 
 <h1 class="page-title">@ViewBag.PageTitle</h1>
@@ -12,7 +20,7 @@
     <div class="table1">
       <table>
         <tr>
-          <td colspan="2"><b>Tillgängliga kvalifikationer</b></td>
+          <td colspan="2"><b>Tillgängliga @ViewBag.CourseOrQual</b></td>
         </tr>
         @foreach (var course in Model)
         {
@@ -26,7 +34,7 @@
     <div class="table2">
       <table>
         <tr>
-          <td colspan="2"><b>@UserSession.User!.UserFirstName @UserSession.User.UserLastName's kvalifikationer</b></td>
+          <td colspan="2"><b>@UserSession.User!.UserFirstName @UserSession.User.UserLastName's @ViewBag.CourseOrQual</b></td>
         </tr>
         @foreach (var course in UserSession.User!.UserCourses!)
         {

@@ -18,6 +18,13 @@
         <p></p>
         <p> @student.UserAddress!.AddressStreet @student.UserAddress!.AddressNumber</p>
         <p>@student.UserAddress!.AddressZipCode @student.UserAddress.AddressCity</p>
+        <div class="smallerText">Studenten är registrerad på följande kurser :<br>
+            @foreach (var item in student.UserCourses!)
+            {
+              <b>-</b>
+              @item.CourseTitle;<br>
+            }
+            </div>
         <p><a asp-action="DeleteStudent" asp-route-id="@student.UserId">Ta bort</a> <a asp-action="EditStudent" asp-route-id="@student.UserId">Uppdatera</a></p>
         <br>
       </div>

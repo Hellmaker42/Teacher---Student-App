@@ -86,13 +86,22 @@ namespace Tenta_API.Controllers
       return Ok(response);
     }
 
+    // [HttpGet("bynumber/{number}")]
+    // public async Task<ActionResult<CourseViewModel>> GetCourseByNumber(int number)
+    // {
+    //   var response = await _courseRepo.GetCourseByNumberAsync(number);
+    //   if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med kursnummer: {number}.");
+
+    //   return Ok(response);
+    // }
+
     [HttpGet("bynumber/{number}")]
-    public async Task<ActionResult<CourseViewModel>> GetCourseByNumber(int number)
+    public async Task<bool> CheckIfCourseNumberExists(int number)
     {
       var response = await _courseRepo.GetCourseByNumberAsync(number);
-      if (response is null) return NotFound($"Vi kunde inte hitta någon kurs med kursnummer: {number}.");
+      if (response is null) return false;
 
-      return Ok(response);
+      return true;
     }
 
     [HttpGet("bycategory/{id}")]

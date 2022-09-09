@@ -7,6 +7,12 @@
     <div class="form-control">
       <label asp-for="@Model!.Number">Kursnummer</label>
       <input asp-for="@Model!.Number" />
+      @{
+        if(ViewBag.NumberError is not null)
+        {
+          <p style="color: red;">@ViewBag.NumberError</p>
+        }
+      }
 </div>  
     <div class="form-control">
       <label asp-for="@Model!.Title">Titel</label>

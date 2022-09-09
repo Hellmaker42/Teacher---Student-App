@@ -6,6 +6,12 @@
     <div class="form-control">
       <label asp-for="@Model!.CourseNumber">Kursnummer</label>
       <input asp-for="@Model!.CourseNumber" />
+        @{
+        if(ViewBag.NumberError is not null)
+        {
+          <p style="color: red;">@ViewBag.NumberError</p>
+        }
+      }
     </div>
     <div class="form-control">
       <label asp-for="@Model!.CourseTitle">Titel</label>
@@ -29,6 +35,16 @@
       <input type="text" id="cat_field" value="" />
       <a href='' onclick="this.href='CreateCategoryFromEdit?info='+document.getElementById('cat_field').value+'?id=@Model.CourseId'">Lägg till kategori</a><br>
       <label asp-for="@Model!.CourseCategory!.CategoryName">Vilken kategori tillhör kursen</label>
+      @{
+        foreach (var item in ViewBag.Categories)
+        {
+          if (item.Value == Model.CourseCategory!.CategoryId.ToString())
+          {
+          item.Selected = true;
+          break;
+          }
+        }
+      }
       <select class="form-control" asp-items="@ViewBag.Categories" asp-for="@Model!.CourseCategory!.CategoryName"></select>
     </div>
     <div class="form-control">

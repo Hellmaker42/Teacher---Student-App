@@ -90,11 +90,6 @@ namespace MvcAdmin.Controllers
     [HttpGet("SaveQualToTeacher")]
     public async Task<IActionResult> SaveQualToTeacher()
     {
-      // int id = Class.UserSession.User!.UserId;
-      // var teacherModel = Class.UserSession.User;
-      // teacherModel.UserCourses = Class.UserSession.Courses;
-      // await _teacherService.UpdateTeacher(id, teacherModel);
-
       AddQualToTeacherViewModel qualModel = new();
       qualModel.TeacherEmail = Class.UserSession.User!.UserEmail;
       foreach (var course in Class.UserSession.Courses!)
@@ -122,8 +117,16 @@ namespace MvcAdmin.Controllers
       Class.UserSession.User.UserCourses.Clear();
       Class.UserSession.Courses!.Clear();
      
+     if(Class.UserSession.User.UserStudentOrTeacher)
+     {
       var teachers = await _teacherService.GetAllTeachers();
       return View("ListAllTeachers", teachers);
+     }
+     else
+     {
+      return this.RedirectToAction("GetAllStudents", "Student");
+     }
+
     }
 
     //TODO:
@@ -222,6 +225,7 @@ namespace MvcAdmin.Controllers
     public async Task<IActionResult> EditTeacher(int id)
     {
       var teacher = await _teacherService.GetTeacherById(id);
+      Class.UserSession.User = teacher;
       return View("EditTeacher", teacher);
     }
 
@@ -229,9 +233,19 @@ namespace MvcAdmin.Controllers
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTeacher(int id, UserViewModel teacherModel)
     {
+      if(Class.UserSession.User!.UserEmail! != teacherModel.UserEmail)
+      {
+        if (await _teacherService.CheckEmail(teacherModel.UserEmail!))
+        {
+          ViewBag.EmailError = "Epostadressen du angivit finns redan i systemet.";
+          teacherModel = await _teacherService.GetTeacherById(id);
+          return View("EditTeacher", teacherModel);
+        }
+      }
       var teacher = await _teacherService.UpdateTeacher(id, teacherModel);
       // return Ok(teacher);
-      return View("Confirmation");
+        var teachers = await _teacherService.GetAllTeachers();
+        return View("ListAllTeachers", teachers);
     }
 
     // [Route("AddQualToTeacher")]
